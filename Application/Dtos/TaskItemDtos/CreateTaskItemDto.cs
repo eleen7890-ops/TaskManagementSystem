@@ -18,14 +18,14 @@ namespace Application.Dtos.TaskItemDtos
         public string Description { get; set; } = string.Empty;
         [Required(ErrorMessage = "Due Date Is Required")]
 
-        public DateTime? DueDate { get; set; }
+        public DateTime DueDate { get; set; }
         [Required(ErrorMessage = "Status Is Required")]
 
-        public TaskStatusEnum? Status { get; set; }
+        public TaskStatusEnum Status { get; set; }
         [Required(ErrorMessage = "Priority Is Required")]
-        public TaskPriorityEnum? Priority { get; set; }
+        public TaskPriorityEnum Priority { get; set; }
 
-        [Required(ErrorMessage = "User Is Required")]
+        [Range(1, int.MaxValue, ErrorMessage = "User Is Required")]
         public int UserId { get; set; }
        
     }

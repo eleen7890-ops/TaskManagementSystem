@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Enums;
 
 namespace Application.Dtos.TaskItemDtos
 {
@@ -10,9 +11,7 @@ namespace Application.Dtos.TaskItemDtos
     {
         public string Title { get; set; } = string.Empty;
         public DateTime? DueDate { get; set; }
-        public int UserId { get; set; }
-        public string? UserName { get; set; }
-
+        public string? FullName { get; set; }
 
     }
 }

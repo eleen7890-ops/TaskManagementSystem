@@ -16,8 +16,7 @@ namespace Application.Dtos.TaskItemDtos
         public TaskStatusEnum? Status { get; set; }
         public TaskPriorityEnum? Priority { get; set; }
         public DateTime? DueDate { get; set; }
-        public int UserId { get; set; }
-        public string? UserName { get; set; }
+        public string? FullName { get; set; }
 
     }
 }
