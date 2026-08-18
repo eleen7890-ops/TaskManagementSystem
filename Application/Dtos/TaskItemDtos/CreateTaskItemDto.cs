@@ -12,7 +12,7 @@ namespace Application.Dtos.TaskItemDtos
    public class CreateTaskItemDto
     {
         [Required(ErrorMessage ="Title Is Required")]
-        [MinLength(3)]
+        [MinLength(3, ErrorMessage = "Title Must Be At Least 3 Characters")]
         public string Title { get; set; } = string.Empty;
 
         public string Description { get; set; } = string.Empty;
