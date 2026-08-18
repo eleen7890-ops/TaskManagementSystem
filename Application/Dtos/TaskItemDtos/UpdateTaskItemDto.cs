@@ -10,6 +10,7 @@ namespace Application.Dtos.TaskItemDtos
 {
     public class UpdateTaskItemDto
     {
+
         [Required(ErrorMessage = "Title Is Required")]
         [MinLength(3)]
         public string Title { get; set; } = string.Empty;

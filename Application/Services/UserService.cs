@@ -65,6 +65,8 @@ namespace Application.Services
         {
             var userUpdate = new User
             {
+                UserId = id,
+
                 Email = updateUserDto.Email,
                 FullName = updateUserDto.FullName
             };
