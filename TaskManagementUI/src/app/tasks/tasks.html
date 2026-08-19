@@ -31,7 +31,32 @@
       <h2>Tasks</h2>
       <span>Manage and organize your work</span>
     </div>
+<section class="task-statistics">
 
+  <div class="stat-total">
+    <span class="stat-label">Total Tasks</span>
+    <span class="stat-number">{{ totalTasks }}</span>
+  </div>
+
+  <div class="priority-stat">
+    <span class="priority-dot low"></span>
+    <span>Low</span>
+    <strong>{{ lowPriorityTasks }}</strong>
+  </div>
+
+  <div class="priority-stat">
+    <span class="priority-dot medium"></span>
+    <span>Medium</span>
+    <strong>{{ mediumPriorityTasks }}</strong>
+  </div>
+
+  <div class="priority-stat">
+    <span class="priority-dot high"></span>
+    <span>High</span>
+    <strong>{{ highPriorityTasks }}</strong>
+  </div>
+
+</section>
     <div class="tasks-actions">
 
       <button class="filter-btn">
@@ -79,12 +104,30 @@
               <h4>{{ task.title }}</h4>
               <div class="task-meta">
                 <span><i class="bi bi-person"></i>{{ task.fullName }}</span>
-                <span><i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}</span>
+                <span *ngIf="task.dueDate">
+                  <i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}
+                </span>
+           <span
+  *ngIf="task.dueDate && isOverdue(task.dueDate)"
+  class="overdue">
+  ⚠ Overdue
+</span>
+
+                  <span class="priority">
+    <span
+      class="priority-dot"
+      [class.low]="task.priority === 1"
+      [class.medium]="task.priority === 2"
+      [class.high]="task.priority === 3">
+    </span>
+
+    {{ task.priority === 1 ? 'Low' : task.priority === 2 ? 'Medium' : 'High' }}
+  </span>
               </div>
             </div>
             <div class="task-actions">
-              <button title="View Details"><i class="bi bi-eye"></i></button>
-              <button title="Edit"><i class="bi bi-pencil"></i></button>
+
+             <button title="Edit"><i class="bi bi-pencil"></i></button>
               <button title="Delete" class="delete-btn"><i class="bi bi-trash3"></i></button>
             </div>
           </div>
@@ -107,12 +150,28 @@
               <h4>{{ task.title }}</h4>
               <div class="task-meta">
                 <span><i class="bi bi-person"></i>{{ task.fullName }}</span>
-                <span><i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}</span>
+                <span *ngIf="task.dueDate">
+                  <i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}
+                </span>
+<span
+  *ngIf="task.dueDate && isOverdue(task.dueDate)"
+  class="overdue">
+  ⚠ Overdue
+</span>
+                  <span class="priority">
+    <span
+      class="priority-dot"
+      [class.low]="task.priority === 1"
+      [class.medium]="task.priority === 2"
+      [class.high]="task.priority === 3">
+    </span>
+
+    {{ task.priority === 1 ? 'Low' : task.priority === 2 ? 'Medium' : 'High' }}
+  </span>
               </div>
             </div>
             <div class="task-actions">
-              <button title="View Details"><i class="bi bi-eye"></i></button>
-              <button title="Edit"><i class="bi bi-pencil"></i></button>
+     <button title="Edit"><i class="bi bi-pencil"></i></button>
               <button title="Delete" class="delete-btn"><i class="bi bi-trash3"></i></button>
             </div>
           </div>
@@ -135,11 +194,24 @@
               <h4>{{ task.title }}</h4>
               <div class="task-meta">
                 <span><i class="bi bi-person"></i>{{ task.fullName }}</span>
-                <span><i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}</span>
+                <span *ngIf="task.dueDate">
+                  <i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}
+                </span>
+
+   <span class="priority">
+    <span
+      class="priority-dot"
+      [class.low]="task.priority === 1"
+      [class.medium]="task.priority === 2"
+      [class.high]="task.priority === 3">
+    </span>
+
+    {{ task.priority === 1 ? 'Low' : task.priority === 2 ? 'Medium' : 'High' }}
+  </span>
               </div>
             </div>
             <div class="task-actions">
-              <button title="View Details"><i class="bi bi-eye"></i></button>
+
               <button title="Edit"><i class="bi bi-pencil"></i></button>
               <button title="Delete" class="delete-btn"><i class="bi bi-trash3"></i></button>
             </div>
