@@ -1,18 +1,36 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Task } from '../models/task';
 import { TaskService } from '../services/task.service';
 import { TaskDetails } from '../models/task-details';
-
+import { CreateTask } from '../models/create-task';
 @Component({
   selector: 'app-tasks',
-  imports: [DatePipe, NgClass, NgFor, NgIf],
+  imports: [DatePipe, NgClass, NgFor, NgIf, FormsModule],
   templateUrl: './tasks.html',
   styleUrl: './tasks.css'
 })
 export class Tasks implements OnInit {
   isDarkMode = false;
   tasks: Task[] = [];
+   showAddTask = false;
+
+  newTask: CreateTask = {
+    title: '',
+    description: '',
+    dueDate: '',
+    status:0,
+    priority: 0,
+    userId: 0
+  };
+openAddTask(): void {
+  this.showAddTask = true;
+}
+closeAddTask(): void {
+  this.showAddTask = false;
+}
+
   selectedTask: TaskDetails | null = null;
   viewTask(id: number): void {
   this.taskService.getTaskById(id).subscribe({
@@ -20,11 +38,17 @@ export class Tasks implements OnInit {
       this.selectedTask = task;
       console.log('Selected task:', task);
     },
+    
     error: (error) => {
       console.error('Error loading task details:', error);
     }
   });
 }
+
+  closeDetails(): void {
+    this.selectedTask = null;
+  }
+
 get totalTasks(): number {
   return this.tasks.length;
 }
