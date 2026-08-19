@@ -1,9 +1,25 @@
+.page {
+  min-height: 100vh;
+  background-color: #ffffff;
+  color: #222;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 .navbar {
   height: 75px;
   padding: 0 35px;
   background-color: #ffffff !important;
   border-bottom: 1px solid #eeeeee;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .navbar img {
@@ -19,14 +35,35 @@
   letter-spacing: 1px;
   color: #772149;
 }
+
+.theme-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #eeeeee;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #772149;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s ease;
+}
+
+.theme-btn:hover {
+  background: #f5f5f5;
+}
+
 .tasks-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin: 40px 0 30px;
-  padding: 0 35px; 
+  padding: 0 35px;
   gap: 30px;
 }
+
 .tasks-title h2 {
   margin: 0;
   font-size: 30px;
@@ -83,11 +120,14 @@
 
 .search-box input {
   flex: 1;
+  width: 100%;
   height: 100%;
   border: none;
   outline: none;
   padding: 0 12px;
+  background: transparent;
   font-size: 14px;
+  color: #222;
 }
 
 .search-box input::placeholder {
@@ -95,6 +135,9 @@
 }
 
 .search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 45px;
   height: 100%;
   border: none;
@@ -109,7 +152,6 @@
   color: #222;
 }
 
-
 .task-board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -118,11 +160,11 @@
 }
 
 .task-column {
+  min-height: 350px;
+  padding: 20px;
   background: #f8f8f9;
   border: 1px solid #eeeeee;
   border-radius: 16px;
-  padding: 20px;
-  min-height: 350px;
 }
 
 .column-header {
@@ -168,11 +210,11 @@
 }
 
 .task-item {
+  padding: 16px;
   background: #ffffff;
   border: 1px solid #eeeeee;
   border-radius: 12px;
-  padding: 16px;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .task-item:hover {
@@ -225,7 +267,7 @@
   background: transparent;
   color: #777;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .task-actions button:hover {
@@ -237,11 +279,7 @@
   background: #fff0f0;
   color: #d64545;
 }
-@media (max-width: 1000px) {
-  .task-board {
-    grid-template-columns: 1fr;
-  }
-}
+
 .users-section {
   margin: 50px 40px;
 }
@@ -296,7 +334,7 @@
 }
 
 .users-table tbody tr {
-  transition: background 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .users-table tbody tr:hover {
@@ -346,7 +384,7 @@
   background: transparent;
   color: #777;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .user-actions button:hover {
@@ -358,6 +396,7 @@
   background: #fff0f0;
   color: #d64545;
 }
+
 .add-task-btn,
 .add-user-btn {
   display: flex;
@@ -372,10 +411,214 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .add-task-btn:hover,
 .add-user-btn:hover {
   background: #904568;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70px;
+  margin-top: 60px;
+  border-top: 1px solid #eeeeee;
+  color: #999;
+  font-size: 12px;
+  background: #ffffff;
+}
+
+@media (max-width: 1000px) {
+  .task-board {
+    grid-template-columns: 1fr;
+  }
+
+  .tasks-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tasks-actions {
+    width: 100%;
+  }
+
+  .search-box {
+    flex: 1;
+  }
+}
+
+.page.dark-mode {
+  background-color: #171417;
+  color: #eeeeee;
+}
+
+.page.dark-mode .navbar {
+  background-color: #211d20 !important;
+  border-bottom-color: #332d31;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.page.dark-mode .navbar-brand {
+  color: #d98bb0;
+}
+
+.page.dark-mode .theme-btn {
+  background-color: #2a2528;
+  border-color: #40383c;
+  color: #f2c4d9;
+}
+
+.page.dark-mode .theme-btn:hover {
+  background-color: #352f32;
+}
+
+.page.dark-mode .tasks-title h2,
+.page.dark-mode .users-header h2 {
+  color: #d98bb0;
+}
+
+.page.dark-mode .tasks-title span,
+.page.dark-mode .users-header span {
+  color: #aaa;
+}
+
+.page.dark-mode .search-box {
+  background-color: #252124;
+  border-color: #3a3438;
+}
+
+.page.dark-mode .search-box input {
+  color: #eeeeee;
+}
+
+.page.dark-mode .search-box input::placeholder {
+  color: #888;
+}
+
+.page.dark-mode .search-btn {
+  color: #d98bb0;
+}
+
+.page.dark-mode .search-btn:hover {
+  background-color: #352f32;
+  color: #ffffff;
+}
+
+.page.dark-mode .filter-btn {
+  background-color: #772149;
+}
+
+.page.dark-mode .task-column {
+  background-color: #211d20;
+  border-color: #332d31;
+}
+
+.page.dark-mode .column-header h3 {
+  color: #d98bb0;
+}
+
+.page.dark-mode .column-header span:not(.task-count) {
+  color: #999;
+}
+
+.page.dark-mode .task-count {
+  background-color: #2a2528;
+  border-color: #40383c;
+  color: #ccc;
+}
+
+.page.dark-mode .task-item {
+  background-color: #292427;
+  border-color: #3a3438;
+}
+
+.page.dark-mode .task-item:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+}
+
+.page.dark-mode .task-info h4 {
+  color: #eeeeee;
+}
+
+.page.dark-mode .task-meta {
+  color: #aaa;
+}
+
+.page.dark-mode .task-actions {
+  border-top-color: #3a3438;
+}
+
+.page.dark-mode .task-actions button {
+  color: #aaa;
+}
+
+.page.dark-mode .task-actions button:hover {
+  background-color: #393235;
+  color: #fff;
+}
+
+.page.dark-mode .task-actions .delete-btn:hover {
+  background-color: #4a252c;
+  color: #ff8d98;
+}
+
+.page.dark-mode .users-table-wrapper {
+  background-color: #211d20;
+  border-color: #332d31;
+}
+
+.page.dark-mode .users-table th {
+  background-color: #292427;
+  color: #d98bb0;
+}
+
+.page.dark-mode .users-table td {
+  border-top-color: #3a3438;
+  color: #bbb;
+}
+
+.page.dark-mode .users-table tbody tr:hover {
+  background-color: #292427;
+}
+
+.page.dark-mode .user-info {
+  color: #eeeeee;
+}
+
+.page.dark-mode .user-avatar {
+  background-color: #393235;
+  color: #ddd;
+}
+
+.page.dark-mode .user-actions button {
+  color: #aaa;
+}
+
+.page.dark-mode .user-actions button:hover {
+  background-color: #393235;
+  color: #fff;
+}
+
+.page.dark-mode .user-actions .delete-btn:hover {
+  background-color: #4a252c;
+  color: #ff8d98;
+}
+
+.page.dark-mode .add-task-btn,
+.page.dark-mode .add-user-btn {
+  background-color: #772149;
+}
+
+.page.dark-mode .add-task-btn:hover,
+.page.dark-mode .add-user-btn:hover {
+  background-color: #904568;
+}
+
+.page.dark-mode .footer {
+  background-color: #211d20;
+  border-top-color: #332d31;
+  color: #888;
 }

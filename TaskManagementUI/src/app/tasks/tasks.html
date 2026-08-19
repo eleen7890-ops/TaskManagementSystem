@@ -1,406 +1,570 @@
-<nav class="navbar navbar-expand-lg">
-  <div class="d-flex align-items-center gap-2">
-    
-    <img
-      src="/Images/fda68c77a45ec5b8bbcc69d2812febb8-removebg-preview.png"
-      alt="Lock In Logo"
-    >
+<div class="page" [class.dark-mode]="isDarkMode">
 
-    <span class="navbar-brand">
-      LOCK IN
+  <nav class="navbar navbar-expand-lg">
+
+    <div class="navbar-left">
+
+      <img
+        src="/Images/fda68c77a45ec5b8bbcc69d2812febb8-removebg-preview.png"
+        alt="Lock In Logo"
+      >
+
+      <span class="navbar-brand">
+        LOCK IN
+      </span>
+
+    </div>
+
+    <button class="theme-btn" (click)="toggleTheme()">
+      <i
+        class="bi"
+        [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill'">
+      </i>
+    </button>
+
+  </nav>
+
+
+  <section class="tasks-header">
+
+    <div class="tasks-title">
+      <h2>Tasks</h2>
+      <span>Manage and organize your work</span>
+    </div>
+
+    <div class="tasks-actions">
+
+      <button class="filter-btn">
+        <i class="bi bi-funnel"></i>
+        <span>Filter</span>
+      </button>
+
+      <div class="search-box">
+
+        <input
+          type="search"
+          placeholder="Search tasks..."
+          aria-label="Search tasks"
+        >
+
+        <button type="button" class="search-btn">
+          <i class="bi bi-search"></i>
+        </button>
+
+      </div>
+
+      <button class="add-task-btn">
+        <i class="bi bi-plus-lg"></i>
+        Add Task
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <section class="task-board">
+
+
+    <!-- TO DO -->
+
+    <div class="task-column">
+
+      <div class="column-header">
+
+        <div>
+          <h3>To Do</h3>
+          <span>Tasks that haven't started</span>
+        </div>
+
+        <span class="task-count">2</span>
+
+      </div>
+
+
+      <div class="task-list">
+
+        <div class="task-item">
+
+          <div class="task-info">
+
+            <h4>Fix Login Authentication</h4>
+
+            <div class="task-meta">
+
+              <span>
+                <i class="bi bi-person"></i>
+                Ayleen
+              </span>
+
+              <span>
+                <i class="bi bi-calendar3"></i>
+                Aug 20
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="task-actions">
+
+            <button title="View Details">
+              <i class="bi bi-eye"></i>
+            </button>
+
+            <button title="Edit">
+              <i class="bi bi-pencil"></i>
+            </button>
+
+            <button
+              title="Delete"
+              class="delete-btn">
+              <i class="bi bi-trash3"></i>
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="task-item">
+
+          <div class="task-info">
+
+            <h4>Fix API Validation</h4>
+
+            <div class="task-meta">
+
+              <span>
+                <i class="bi bi-person"></i>
+                Sara
+              </span>
+
+              <span>
+                <i class="bi bi-calendar3"></i>
+                Aug 21
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="task-actions">
+
+            <button title="View Details">
+              <i class="bi bi-eye"></i>
+            </button>
+
+            <button title="Edit">
+              <i class="bi bi-pencil"></i>
+            </button>
+
+            <button
+              title="Delete"
+              class="delete-btn">
+              <i class="bi bi-trash3"></i>
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- IN PROGRESS -->
+
+    <div class="task-column">
+
+      <div class="column-header">
+
+        <div>
+          <h3>In Progress</h3>
+          <span>Tasks currently being worked on</span>
+        </div>
+
+        <span class="task-count">1</span>
+
+      </div>
+
+
+      <div class="task-list">
+
+        <div class="task-item">
+
+          <div class="task-info">
+
+            <h4>Build Dashboard UI</h4>
+
+            <div class="task-meta">
+
+              <span>
+                <i class="bi bi-person"></i>
+                Sara
+              </span>
+
+              <span>
+                <i class="bi bi-calendar3"></i>
+                Aug 22
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="task-actions">
+
+            <button title="View Details">
+              <i class="bi bi-eye"></i>
+            </button>
+
+            <button title="Edit">
+              <i class="bi bi-pencil"></i>
+            </button>
+
+            <button
+              title="Delete"
+              class="delete-btn">
+              <i class="bi bi-trash3"></i>
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- COMPLETED -->
+
+    <div class="task-column">
+
+      <div class="column-header">
+
+        <div>
+          <h3>Completed</h3>
+          <span>Finished tasks</span>
+        </div>
+
+        <span class="task-count">2</span>
+
+      </div>
+
+
+      <div class="task-list">
+
+        <div class="task-item">
+
+          <div class="task-info">
+
+            <h4>Setup Database</h4>
+
+            <div class="task-meta">
+
+              <span>
+                <i class="bi bi-person"></i>
+                Ayleen
+              </span>
+
+              <span>
+                <i class="bi bi-calendar3"></i>
+                Aug 18
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="task-actions">
+
+            <button title="View Details">
+              <i class="bi bi-eye"></i>
+            </button>
+
+            <button title="Edit">
+              <i class="bi bi-pencil"></i>
+            </button>
+
+            <button
+              title="Delete"
+              class="delete-btn">
+              <i class="bi bi-trash3"></i>
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="task-item">
+
+          <div class="task-info">
+
+            <h4>Create User Module</h4>
+
+            <div class="task-meta">
+
+              <span>
+                <i class="bi bi-person"></i>
+                Sara
+              </span>
+
+              <span>
+                <i class="bi bi-calendar3"></i>
+                Aug 17
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="task-actions">
+
+            <button title="View Details">
+              <i class="bi bi-eye"></i>
+            </button>
+
+            <button title="Edit">
+              <i class="bi bi-pencil"></i>
+            </button>
+
+            <button
+              title="Delete"
+              class="delete-btn">
+              <i class="bi bi-trash3"></i>
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- USERS -->
+
+  <section class="users-section">
+
+    <div class="users-header">
+
+      <div>
+        <h2>Users</h2>
+        <span>Manage users and their information</span>
+      </div>
+
+      <button class="add-user-btn">
+        <i class="bi bi-plus-lg"></i>
+        Add User
+      </button>
+
+    </div>
+
+
+    <div class="users-table-wrapper">
+
+      <table class="users-table">
+
+        <thead>
+
+          <tr>
+
+            <th>User</th>
+
+            <th>Email</th>
+
+            <th class="actions-column">
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+          <tr>
+
+            <td>
+
+              <div class="user-info">
+
+                <div class="user-avatar">
+                  A
+                </div>
+
+                <span>
+                  Ayleen Abu Shawish
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <td>
+              ayleen@email.com
+            </td>
+
+
+            <td>
+
+              <div class="user-actions">
+
+                <button title="View Details">
+                  <i class="bi bi-eye"></i>
+                </button>
+
+                <button title="Edit">
+                  <i class="bi bi-pencil"></i>
+                </button>
+
+                <button
+                  title="Delete"
+                  class="delete-btn">
+                  <i class="bi bi-trash3"></i>
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+
+
+          <tr>
+
+            <td>
+
+              <div class="user-info">
+
+                <div class="user-avatar">
+                  S
+                </div>
+
+                <span>
+                  Sara Ahmad
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <td>
+              sara@email.com
+            </td>
+
+
+            <td>
+
+              <div class="user-actions">
+
+                <button title="View Details">
+                  <i class="bi bi-eye"></i>
+                </button>
+
+                <button title="Edit">
+                  <i class="bi bi-pencil"></i>
+                </button>
+
+                <button
+                  title="Delete"
+                  class="delete-btn">
+                  <i class="bi bi-trash3"></i>
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+
+
+          <tr>
+
+            <td>
+
+              <div class="user-info">
+
+                <div class="user-avatar">
+                  O
+                </div>
+
+                <span>
+                  Omar Khaled
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <td>
+              omar@email.com
+            </td>
+
+
+            <td>
+
+              <div class="user-actions">
+
+                <button title="View Details">
+                  <i class="bi bi-eye"></i>
+                </button>
+
+                <button title="Edit">
+                  <i class="bi bi-pencil"></i>
+                </button>
+
+                <button
+                  title="Delete"
+                  class="delete-btn">
+                  <i class="bi bi-trash3"></i>
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+
+
+  <footer class="footer">
+
+    <span>
+      © 2026 LOCK IN. All rights reserved.
     </span>
 
-  </div>
-</nav>
+  </footer>
 
-<section class="tasks-header">
-  <div class="tasks-title">
-    <h2>Tasks</h2>
-    <span>Manage and organize your work</span>
-  </div>
-
-  <div class="tasks-actions">
-
-    <button class="filter-btn">
-      <i class="bi bi-funnel"></i>
-      <span>Filter</span>
-    </button>
-
-<div class="search-box">
-  <input
-    type="search"
-    placeholder="Search tasks..."
-    aria-label="Search tasks"
-  >
-
-  <button type="button" class="search-btn">
-    <i class="bi bi-search"></i>
-  </button>
 </div>
-    <button class="add-task-btn">
-      <i class="bi bi-plus-lg"></i>
-      Add Task
-    </button>
-
-  </div>
-</section>
-<section class="task-board">
-
-  <!-- TO DO -->
-  <div class="task-column">
-
-    <div class="column-header">
-      <div>
-        <h3>To Do</h3>
-        <span>Tasks that haven't started</span>
-      </div>
-
-      <span class="task-count">2</span>
-    </div>
-
-    <div class="task-list">
-
-      <div class="task-item">
-
-        <div class="task-info">
-          <h4>Fix Login Authentication</h4>
-
-          <div class="task-meta">
-            <span>
-              <i class="bi bi-person"></i>
-              Ayleen
-            </span>
-
-            <span>
-              <i class="bi bi-calendar3"></i>
-              Aug 20
-            </span>
-          </div>
-        </div>
-
-        <div class="task-actions">
-          <button title="View Details">
-            <i class="bi bi-eye"></i>
-          </button>
-
-          <button title="Edit">
-            <i class="bi bi-pencil"></i>
-          </button>
-
-          <button title="Delete" class="delete-btn">
-            <i class="bi bi-trash3"></i>
-          </button>
-        </div>
-
-      </div>
-
-
-      <div class="task-item">
-
-        <div class="task-info">
-          <h4>Fix API Validation</h4>
-
-          <div class="task-meta">
-            <span>
-              <i class="bi bi-person"></i>
-              Sara
-            </span>
-
-            <span>
-              <i class="bi bi-calendar3"></i>
-              Aug 21
-            </span>
-          </div>
-        </div>
-
-        <div class="task-actions">
-          <button title="View Details">
-            <i class="bi bi-eye"></i>
-          </button>
-
-          <button title="Edit">
-            <i class="bi bi-pencil"></i>
-          </button>
-
-          <button title="Delete" class="delete-btn">
-            <i class="bi bi-trash3"></i>
-          </button>
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- IN PROGRESS -->
-  <div class="task-column">
-
-    <div class="column-header">
-      <div>
-        <h3>In Progress</h3>
-        <span>Tasks currently being worked on</span>
-      </div>
-
-      <span class="task-count">1</span>
-    </div>
-
-    <div class="task-list">
-
-      <div class="task-item">
-
-        <div class="task-info">
-          <h4>Build Dashboard UI</h4>
-
-          <div class="task-meta">
-            <span>
-              <i class="bi bi-person"></i>
-              Sara
-            </span>
-
-            <span>
-              <i class="bi bi-calendar3"></i>
-              Aug 22
-            </span>
-          </div>
-        </div>
-
-        <div class="task-actions">
-          <button title="View Details">
-            <i class="bi bi-eye"></i>
-          </button>
-
-          <button title="Edit">
-            <i class="bi bi-pencil"></i>
-          </button>
-
-          <button title="Delete" class="delete-btn">
-            <i class="bi bi-trash3"></i>
-          </button>
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- COMPLETED -->
-  <div class="task-column">
-
-    <div class="column-header">
-      <div>
-        <h3>Completed</h3>
-        <span>Finished tasks</span>
-      </div>
-
-      <span class="task-count">2</span>
-    </div>
-
-    <div class="task-list">
-
-      <div class="task-item">
-
-        <div class="task-info">
-          <h4>Setup Database</h4>
-
-          <div class="task-meta">
-            <span>
-              <i class="bi bi-person"></i>
-              Ayleen
-            </span>
-
-            <span>
-              <i class="bi bi-calendar3"></i>
-              Aug 18
-            </span>
-          </div>
-        </div>
-
-        <div class="task-actions">
-          <button title="View Details">
-            <i class="bi bi-eye"></i>
-          </button>
-
-          <button title="Edit">
-            <i class="bi bi-pencil"></i>
-          </button>
-
-          <button title="Delete" class="delete-btn">
-            <i class="bi bi-trash3"></i>
-          </button>
-        </div>
-
-      </div>
-
-
-      <div class="task-item">
-
-        <div class="task-info">
-          <h4>Create User Module</h4>
-
-          <div class="task-meta">
-            <span>
-              <i class="bi bi-person"></i>
-              Sara
-            </span>
-
-            <span>
-              <i class="bi bi-calendar3"></i>
-              Aug 17
-            </span>
-          </div>
-        </div>
-
-        <div class="task-actions">
-          <button title="View Details">
-            <i class="bi bi-eye"></i>
-          </button>
-
-          <button title="Edit">
-            <i class="bi bi-pencil"></i>
-          </button>
-
-          <button title="Delete" class="delete-btn">
-            <i class="bi bi-trash3"></i>
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-
-</section>
-<section class="users-section">
-
-  <div class="users-header">
-    <div>
-      <h2>Users</h2>
-      <span>Manage users and their information</span>
-    </div>
-
-    <button class="add-user-btn">
-      <i class="bi bi-plus-lg"></i>
-      Add User
-    </button>
-  </div>
-
-
-  <div class="users-table-wrapper">
-
-    <table class="users-table">
-
-      <thead>
-        <tr>
-          <th>User</th>
-          <th>Email</th>
-          <th class="actions-column">Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-
-        <tr>
-          <td>
-            <div class="user-info">
-              <div class="user-avatar">A</div>
-              <span>Ayleen Abu Shawish</span>
-            </div>
-          </td>
-
-          <td>ayleen@email.com</td>
-
-
-          <td>
-            <div class="user-actions">
-
-              <button title="View Details">
-                <i class="bi bi-eye"></i>
-              </button>
-
-              <button title="Edit">
-                <i class="bi bi-pencil"></i>
-              </button>
-
-              <button title="Delete" class="delete-btn">
-                <i class="bi bi-trash3"></i>
-              </button>
-
-            </div>
-          </td>
-        </tr>
-
-
-        <tr>
-          <td>
-            <div class="user-info">
-              <div class="user-avatar">S</div>
-              <span>Sara Ahmad</span>
-            </div>
-          </td>
-
-          <td>sara@email.com</td>
-
-
-          <td>
-            <div class="user-actions">
-
-              <button title="View Details">
-                <i class="bi bi-eye"></i>
-              </button>
-
-              <button title="Edit">
-                <i class="bi bi-pencil"></i>
-              </button>
-
-              <button title="Delete" class="delete-btn">
-                <i class="bi bi-trash3"></i>
-              </button>
-
-            </div>
-          </td>
-        </tr>
-
-
-        <tr>
-          <td>
-            <div class="user-info">
-              <div class="user-avatar">O</div>
-              <span>Omar Khaled</span>
-            </div>
-          </td>
-
-          <td>omar@email.com</td>
-
-
-          <td>
-            <div class="user-actions">
-
-              <button title="View Details">
-                <i class="bi bi-eye"></i>
-              </button>
-
-              <button title="Edit">
-                <i class="bi bi-pencil"></i>
-              </button>
-
-              <button title="Delete" class="delete-btn">
-                <i class="bi bi-trash3"></i>
-              </button>
-
-            </div>
-          </td>
-        </tr>
-
-      </tbody>
-
-    </table>
-
-  </div>
-
-</section>
-<footer class="footer">
-  <span>� 2026 LOCK IN. All rights reserved.</span>
-</footer>
