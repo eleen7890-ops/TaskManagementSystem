@@ -42,6 +42,7 @@ namespace Application.Services
             var users = await Repository.GetAllAsync();
             return users.Select(user => new UserDto
             {
+                UserId=user.UserId,
                 Email = user.Email,
                 FullName=user.FullName
             }).ToList();

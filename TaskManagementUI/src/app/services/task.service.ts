@@ -3,6 +3,7 @@ import { Task } from "../models/task";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { TaskDetails } from "../models/task-details";
+import { CreateTask } from "../models/create-task";
 @Injectable({
   providedIn: "root",
 })
@@ -16,6 +17,9 @@ export class TaskService {
   }
   getTaskById(id: number): Observable<TaskDetails> {
   return this.http.get<TaskDetails>(`${this.apiUrl}/${id}`);
+}
+createTask(task: CreateTask): Observable<number> {
+  return this.http.post<number>(this.apiUrl, task);
 }
   }
   
