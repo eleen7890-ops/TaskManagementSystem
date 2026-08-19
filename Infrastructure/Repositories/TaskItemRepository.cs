@@ -37,17 +37,17 @@ namespace Infrastructure.Repositories
             return true;
         }
 
-        public async Task<IReadOnlyList<TaskItem>> FilterAsync(TaskPriorityEnum? status, TaskStatusEnum? priority)
+        public async Task<IReadOnlyList<TaskItem>> FilterAsync(TaskPriorityEnum? priorityEnum, TaskStatusEnum? statusEnum)
         {
             var query = dbContext.TaskItems.Include(x => x.User).AsQueryable();
-            if (status.HasValue)
+            if (statusEnum.HasValue)
             {
-                query = query.Where(x => x.Status == status.Value);
+                query = query.Where(x => x.Status == statusEnum.Value);
 
             }
-            if (priority.HasValue)
+            if (priorityEnum.HasValue)
             {
-                query = query.Where(x => x.Priority == priority.Value);
+                query = query.Where(x => x.Priority == priorityEnum.Value);
             }
             return await query.ToListAsync();
         }
