@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { Task } from '../models/task';
 import { TaskService } from '../services/task.service';
+import { TaskDetails } from '../models/task-details';
 
 @Component({
   selector: 'app-tasks',
@@ -12,9 +13,22 @@ import { TaskService } from '../services/task.service';
 export class Tasks implements OnInit {
   isDarkMode = false;
   tasks: Task[] = [];
+  selectedTask: TaskDetails | null = null;
+  viewTask(id: number): void {
+  this.taskService.getTaskById(id).subscribe({
+    next: (task) => {
+      this.selectedTask = task;
+      console.log('Selected task:', task);
+    },
+    error: (error) => {
+      console.error('Error loading task details:', error);
+    }
+  });
+}
 get totalTasks(): number {
   return this.tasks.length;
 }
+
 
 get lowPriorityTasks(): number {
   return this.tasks.filter(task => task.priority === 1).length;
