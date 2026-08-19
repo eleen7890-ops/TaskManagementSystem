@@ -622,3 +622,99 @@
   border-top-color: #332d31;
   color: #888;
 }
+.priority {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.priority-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.priority-dot.low {
+  background-color: #6bbf73;
+}
+
+.priority-dot.medium {
+  background-color: #e5a93d;
+}
+
+.priority-dot.high {
+  background-color: #d64545;
+}
+.overdue {
+  color: #d64545;
+  font-weight: 600;
+}
+.task-statistics {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 40px 30px;
+}
+
+.stat-total,
+.priority-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid #eeeeee;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.stat-total {
+  gap: 10px;
+}
+
+.stat-label {
+  color: #777;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.stat-number {
+  color: #772149;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.priority-stat {
+  color: #666;
+  font-size: 13px;
+}
+
+.priority-stat strong {
+  color: #333;
+  font-size: 14px;
+}
+
+.priority-stat .priority-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.page.dark-mode .stat-total,
+.page.dark-mode .priority-stat {
+  background-color: #211d20;
+  border-color: #332d31;
+}
+
+.page.dark-mode .stat-label,
+.page.dark-mode .priority-stat {
+  color: #aaa;
+}
+
+.page.dark-mode .stat-number {
+  color: #d98bb0;
+}
+
+.page.dark-mode .priority-stat strong {
+  color: #eee;
+}
