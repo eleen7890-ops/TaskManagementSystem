@@ -1,6 +1,6 @@
 export interface Task {
   title: string;
-  dueDate: Date;
+  dueDate: string | null;
   fullName: string | null;
   status: number;
   priority: number;
