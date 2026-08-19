@@ -47,7 +47,9 @@ namespace Application.Services
                 Title = item.Title,
                 DueDate = item.DueDate,
                 FullName = item.User?.FullName,
-             
+                Status = item.Status,
+                Priority = item.Priority
+
             }).ToList();
         }
 

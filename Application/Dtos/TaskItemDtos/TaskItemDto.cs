@@ -13,6 +13,8 @@ namespace Application.Dtos.TaskItemDtos
         public string Title { get; set; } = string.Empty;
         public DateTime? DueDate { get; set; }
         public string? FullName { get; set; }
+        public TaskStatusEnum Status { get; set; }
+        public TaskPriorityEnum Priority { get; set; }
 
     }
 }
