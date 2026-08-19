@@ -64,295 +64,89 @@
 
 
   <section class="task-board">
-
-
-    <!-- TO DO -->
-
     <div class="task-column">
-
       <div class="column-header">
-
         <div>
           <h3>To Do</h3>
           <span>Tasks that haven't started</span>
         </div>
-
-        <span class="task-count">2</span>
-
+        <span class="task-count">{{ tasks.filter(t => t.status === 0).length }}</span>
       </div>
-
-
       <div class="task-list">
-
-        <div class="task-item">
-
-          <div class="task-info">
-
-            <h4>Fix Login Authentication</h4>
-
-            <div class="task-meta">
-
-              <span>
-                <i class="bi bi-person"></i>
-                Ayleen
-              </span>
-
-              <span>
-                <i class="bi bi-calendar3"></i>
-                Aug 20
-              </span>
-
+        <ng-container *ngFor="let task of tasks">
+          <div class="task-item" *ngIf="task.status === 0">
+            <div class="task-info">
+              <h4>{{ task.title }}</h4>
+              <div class="task-meta">
+                <span><i class="bi bi-person"></i>{{ task.fullName }}</span>
+                <span><i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}</span>
+              </div>
             </div>
-
-          </div>
-
-
-          <div class="task-actions">
-
-            <button title="View Details">
-              <i class="bi bi-eye"></i>
-            </button>
-
-            <button title="Edit">
-              <i class="bi bi-pencil"></i>
-            </button>
-
-            <button
-              title="Delete"
-              class="delete-btn">
-              <i class="bi bi-trash3"></i>
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <div class="task-item">
-
-          <div class="task-info">
-
-            <h4>Fix API Validation</h4>
-
-            <div class="task-meta">
-
-              <span>
-                <i class="bi bi-person"></i>
-                Sara
-              </span>
-
-              <span>
-                <i class="bi bi-calendar3"></i>
-                Aug 21
-              </span>
-
+            <div class="task-actions">
+              <button title="View Details"><i class="bi bi-eye"></i></button>
+              <button title="Edit"><i class="bi bi-pencil"></i></button>
+              <button title="Delete" class="delete-btn"><i class="bi bi-trash3"></i></button>
             </div>
-
           </div>
-
-
-          <div class="task-actions">
-
-            <button title="View Details">
-              <i class="bi bi-eye"></i>
-            </button>
-
-            <button title="Edit">
-              <i class="bi bi-pencil"></i>
-            </button>
-
-            <button
-              title="Delete"
-              class="delete-btn">
-              <i class="bi bi-trash3"></i>
-            </button>
-
-          </div>
-
-        </div>
-
+        </ng-container>
       </div>
-
     </div>
 
-
-
-    <!-- IN PROGRESS -->
-
     <div class="task-column">
-
       <div class="column-header">
-
         <div>
           <h3>In Progress</h3>
           <span>Tasks currently being worked on</span>
         </div>
-
-        <span class="task-count">1</span>
-
+        <span class="task-count">{{ tasks.filter(t => t.status === 1).length }}</span>
       </div>
-
-
       <div class="task-list">
-
-        <div class="task-item">
-
-          <div class="task-info">
-
-            <h4>Build Dashboard UI</h4>
-
-            <div class="task-meta">
-
-              <span>
-                <i class="bi bi-person"></i>
-                Sara
-              </span>
-
-              <span>
-                <i class="bi bi-calendar3"></i>
-                Aug 22
-              </span>
-
+        <ng-container *ngFor="let task of tasks">
+          <div class="task-item" *ngIf="task.status === 1">
+            <div class="task-info">
+              <h4>{{ task.title }}</h4>
+              <div class="task-meta">
+                <span><i class="bi bi-person"></i>{{ task.fullName }}</span>
+                <span><i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}</span>
+              </div>
             </div>
-
+            <div class="task-actions">
+              <button title="View Details"><i class="bi bi-eye"></i></button>
+              <button title="Edit"><i class="bi bi-pencil"></i></button>
+              <button title="Delete" class="delete-btn"><i class="bi bi-trash3"></i></button>
+            </div>
           </div>
-
-
-          <div class="task-actions">
-
-            <button title="View Details">
-              <i class="bi bi-eye"></i>
-            </button>
-
-            <button title="Edit">
-              <i class="bi bi-pencil"></i>
-            </button>
-
-            <button
-              title="Delete"
-              class="delete-btn">
-              <i class="bi bi-trash3"></i>
-            </button>
-
-          </div>
-
-        </div>
-
+        </ng-container>
       </div>
-
     </div>
 
-
-
-    <!-- COMPLETED -->
-
     <div class="task-column">
-
       <div class="column-header">
-
         <div>
           <h3>Completed</h3>
           <span>Finished tasks</span>
         </div>
-
-        <span class="task-count">2</span>
-
+        <span class="task-count">{{ tasks.filter(t => t.status === 2).length }}</span>
       </div>
-
-
       <div class="task-list">
-
-        <div class="task-item">
-
-          <div class="task-info">
-
-            <h4>Setup Database</h4>
-
-            <div class="task-meta">
-
-              <span>
-                <i class="bi bi-person"></i>
-                Ayleen
-              </span>
-
-              <span>
-                <i class="bi bi-calendar3"></i>
-                Aug 18
-              </span>
-
+        <ng-container *ngFor="let task of tasks">
+          <div class="task-item" *ngIf="task.status === 2">
+            <div class="task-info">
+              <h4>{{ task.title }}</h4>
+              <div class="task-meta">
+                <span><i class="bi bi-person"></i>{{ task.fullName }}</span>
+                <span><i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}</span>
+              </div>
             </div>
-
-          </div>
-
-
-          <div class="task-actions">
-
-            <button title="View Details">
-              <i class="bi bi-eye"></i>
-            </button>
-
-            <button title="Edit">
-              <i class="bi bi-pencil"></i>
-            </button>
-
-            <button
-              title="Delete"
-              class="delete-btn">
-              <i class="bi bi-trash3"></i>
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <div class="task-item">
-
-          <div class="task-info">
-
-            <h4>Create User Module</h4>
-
-            <div class="task-meta">
-
-              <span>
-                <i class="bi bi-person"></i>
-                Sara
-              </span>
-
-              <span>
-                <i class="bi bi-calendar3"></i>
-                Aug 17
-              </span>
-
+            <div class="task-actions">
+              <button title="View Details"><i class="bi bi-eye"></i></button>
+              <button title="Edit"><i class="bi bi-pencil"></i></button>
+              <button title="Delete" class="delete-btn"><i class="bi bi-trash3"></i></button>
             </div>
-
           </div>
-
-
-          <div class="task-actions">
-
-            <button title="View Details">
-              <i class="bi bi-eye"></i>
-            </button>
-
-            <button title="Edit">
-              <i class="bi bi-pencil"></i>
-            </button>
-
-            <button
-              title="Delete"
-              class="delete-btn">
-              <i class="bi bi-trash3"></i>
-            </button>
-
-          </div>
-
-        </div>
-
+        </ng-container>
       </div>
-
     </div>
-
   </section>
 
 
