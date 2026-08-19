@@ -1,50 +1,69 @@
-<nav class="navbar navbar-expand-lg">
-  <div class="d-flex align-items-center gap-2">
-    
-    <img
-      src="/Images/fda68c77a45ec5b8bbcc69d2812febb8-removebg-preview.png"
-      alt="Lock In Logo"
-    >
+<div class="page" [class.dark-mode]="isDarkMode">
 
-    <span class="navbar-brand">
-      LOCK IN
-    </span>
+  <nav class="navbar navbar-expand-lg">
 
-  </div>
-</nav>
+    <div class="navbar-left">
 
-<section class="tasks-header">
-  <div class="tasks-title">
-    <h2>Tasks</h2>
-    <span>Manage and organize your work</span>
-  </div>
+      <img
+        src="/Images/fda68c77a45ec5b8bbcc69d2812febb8-removebg-preview.png"
+        alt="Lock In Logo"
+      >
 
-  <div class="tasks-actions">
+      <span class="navbar-brand">
+        LOCK IN
+      </span>
 
-    <button class="filter-btn">
-      <i class="bi bi-funnel"></i>
-      <span>Filter</span>
+    </div>
+
+    <button class="theme-btn" (click)="toggleTheme()">
+      <i
+        class="bi"
+        [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill'">
+      </i>
     </button>
 
-<div class="search-box">
-  <input
-    type="search"
-    placeholder="Search tasks..."
-    aria-label="Search tasks"
-  >
+  </nav>
 
-  <button type="button" class="search-btn">
-    <i class="bi bi-search"></i>
-  </button>
-</div>
-    <button class="add-task-btn">
-      <i class="bi bi-plus-lg"></i>
-      Add Task
-    </button>
 
-  </div>
-</section>
-<section class="task-board">
+  <section class="tasks-header">
+
+    <div class="tasks-title">
+      <h2>Tasks</h2>
+      <span>Manage and organize your work</span>
+    </div>
+
+    <div class="tasks-actions">
+
+      <button class="filter-btn">
+        <i class="bi bi-funnel"></i>
+        <span>Filter</span>
+      </button>
+
+      <div class="search-box">
+
+        <input
+          type="search"
+          placeholder="Search tasks..."
+          aria-label="Search tasks"
+        >
+
+        <button type="button" class="search-btn">
+          <i class="bi bi-search"></i>
+        </button>
+
+      </div>
+
+      <button class="add-task-btn">
+        <i class="bi bi-plus-lg"></i>
+        Add Task
+      </button>
+
+    </div>
+
+  </section>
+
+
+ <section class="task-board">
 
   <!-- TO DO -->
   <div class="task-column">
@@ -55,77 +74,58 @@
         <span>Tasks that haven't started</span>
       </div>
 
-      <span class="task-count">2</span>
+      <span class="task-count">
+        {{ tasks.filter(t => t.status === 1).length }}
+      </span>
     </div>
 
     <div class="task-list">
 
-      <div class="task-item">
+      <div
+        class="task-item"
+        *ngFor="let task of tasks"
+      >
 
-        <div class="task-info">
-          <h4>Fix Login Authentication</h4>
+        <ng-container *ngIf="task.status === 1">
 
-          <div class="task-meta">
-            <span>
-              <i class="bi bi-person"></i>
-              Ayleen
-            </span>
+          <div class="task-info">
+            <h4>{{ task.title }}</h4>
 
-            <span>
-              <i class="bi bi-calendar3"></i>
-              Aug 20
-            </span>
+            <div class="task-meta">
+
+              <span>
+                <i class="bi bi-person"></i>
+                {{ task.fullName }}
+              </span>
+
+              <span>
+                <i class="bi bi-calendar3"></i>
+                {{ task.dueDate | date:'MMM d' }}
+              </span>
+
+            </div>
           </div>
-        </div>
 
-        <div class="task-actions">
-          <button title="View Details">
-            <i class="bi bi-eye"></i>
-          </button>
+          <div class="task-actions">
 
-          <button title="Edit">
-            <i class="bi bi-pencil"></i>
-          </button>
+            <button title="View Details">
+              <i class="bi bi-eye"></i>
+            </button>
 
-          <button title="Delete" class="delete-btn">
-            <i class="bi bi-trash3"></i>
-          </button>
-        </div>
+            <button title="Edit">
+              <i class="bi bi-pencil"></i>
+            </button>
 
-      </div>
+            <button
+              title="Delete"
+              class="delete-btn"
+            >
+              <i class="bi bi-trash3"></i>
+            </button>
 
-
-      <div class="task-item">
-
-        <div class="task-info">
-          <h4>Fix API Validation</h4>
-
-          <div class="task-meta">
-            <span>
-              <i class="bi bi-person"></i>
-              Sara
-            </span>
-
-            <span>
-              <i class="bi bi-calendar3"></i>
-              Aug 21
-            </span>
           </div>
-        </div>
 
-        <div class="task-actions">
-          <button title="View Details">
-            <i class="bi bi-eye"></i>
-          </button>
-
-          <button title="Edit">
-            <i class="bi bi-pencil"></i>
-          </button>
-
-          <button title="Delete" class="delete-btn">
-            <i class="bi bi-trash3"></i>
-          </button>
-        </div>
+        </ng-container>
 
       </div>
 
@@ -142,42 +142,58 @@
         <span>Tasks currently being worked on</span>
       </div>
 
-      <span class="task-count">1</span>
+      <span class="task-count">
+        {{ tasks.filter(t => t.status === 2).length }}
+      </span>
     </div>
 
     <div class="task-list">
 
-      <div class="task-item">
+      <div
+        class="task-item"
+        *ngFor="let task of tasks"
+      >
 
-        <div class="task-info">
-          <h4>Build Dashboard UI</h4>
+        <ng-container *ngIf="task.status === 2">
 
-          <div class="task-meta">
-            <span>
-              <i class="bi bi-person"></i>
-              Sara
-            </span>
+          <div class="task-info">
+            <h4>{{ task.title }}</h4>
 
-            <span>
-              <i class="bi bi-calendar3"></i>
-              Aug 22
-            </span>
+            <div class="task-meta">
+
+              <span>
+                <i class="bi bi-person"></i>
+                {{ task.fullName }}
+              </span>
+
+              <span>
+                <i class="bi bi-calendar3"></i>
+                {{ task.dueDate | date:'MMM d' }}
+              </span>
+
+            </div>
           </div>
-        </div>
 
-        <div class="task-actions">
-          <button title="View Details">
-            <i class="bi bi-eye"></i>
-          </button>
+          <div class="task-actions">
 
-          <button title="Edit">
-            <i class="bi bi-pencil"></i>
-          </button>
+            <button title="View Details">
+              <i class="bi bi-eye"></i>
+            </button>
 
-          <button title="Delete" class="delete-btn">
-            <i class="bi bi-trash3"></i>
-          </button>
-        </div>
+            <button title="Edit">
+              <i class="bi bi-pencil"></i>
+            </button>
+
+            <button
+              title="Delete"
+              class="delete-btn"
+            >
+              <i class="bi bi-trash3"></i>
+            </button>
+
+          </div>
+
+        </ng-container>
 
       </div>
 
@@ -194,78 +210,58 @@
         <span>Finished tasks</span>
       </div>
 
-      <span class="task-count">2</span>
+      <span class="task-count">
+        {{ tasks.filter(t => t.status === 3).length }}
+      </span>
     </div>
 
     <div class="task-list">
 
-      <div class="task-item">
+      <div
+        class="task-item"
+        *ngFor="let task of tasks"
+      >
 
-        <div class="task-info">
-          <h4>Setup Database</h4>
+        <ng-container *ngIf="task.status === 3">
 
-          <div class="task-meta">
-            <span>
-              <i class="bi bi-person"></i>
-              Ayleen
-            </span>
+          <div class="task-info">
+            <h4>{{ task.title }}</h4>
 
-            <span>
-              <i class="bi bi-calendar3"></i>
-              Aug 18
-            </span>
+            <div class="task-meta">
+
+              <span>
+                <i class="bi bi-person"></i>
+                {{ task.fullName }}
+              </span>
+
+              <span>
+                <i class="bi bi-calendar3"></i>
+                {{ task.dueDate | date:'MMM d' }}
+              </span>
+
+            </div>
           </div>
-        </div>
 
-        <div class="task-actions">
-          <button title="View Details">
-            <i class="bi bi-eye"></i>
-          </button>
+          <div class="task-actions">
 
-          <button title="Edit">
-            <i class="bi bi-pencil"></i>
-          </button>
+            <button title="View Details">
+              <i class="bi bi-eye"></i>
+            </button>
 
-          <button title="Delete" class="delete-btn">
-            <i class="bi bi-trash3"></i>
-          </button>
-        </div>
+            <button title="Edit">
+              <i class="bi bi-pencil"></i>
+            </button>
 
-      </div>
+            <button
+              title="Delete"
+              class="delete-btn"
+            >
+              <i class="bi bi-trash3"></i>
+            </button>
 
-
-      <div class="task-item">
-
-        <div class="task-info">
-          <h4>Create User Module</h4>
-
-          <div class="task-meta">
-            <span>
-              <i class="bi bi-person"></i>
-              Sara
-            </span>
-
-            <span>
-              <i class="bi bi-calendar3"></i>
-              Aug 17
-            </span>
           </div>
-        </div>
 
-        <div class="task-actions">
-          <button title="View Details">
-            <i class="bi bi-eye"></i>
-          </button>
-
-          <button title="Edit">
-            <i class="bi bi-pencil"></i>
-          </button>
-
-          <button title="Delete" class="delete-btn">
-            <i class="bi bi-trash3"></i>
-          </button>
-
-        </div>
+        </ng-container>
 
       </div>
 
@@ -273,134 +269,215 @@
   </div>
 
 </section>
-<section class="users-section">
 
-  <div class="users-header">
-    <div>
-      <h2>Users</h2>
-      <span>Manage users and their information</span>
+  <!-- USERS -->
+
+  <section class="users-section">
+
+    <div class="users-header">
+
+      <div>
+        <h2>Users</h2>
+        <span>Manage users and their information</span>
+      </div>
+
+      <button class="add-user-btn">
+        <i class="bi bi-plus-lg"></i>
+        Add User
+      </button>
+
     </div>
 
-    <button class="add-user-btn">
-      <i class="bi bi-plus-lg"></i>
-      Add User
-    </button>
-  </div>
+
+    <div class="users-table-wrapper">
+
+      <table class="users-table">
+
+        <thead>
+
+          <tr>
+
+            <th>User</th>
+
+            <th>Email</th>
+
+            <th class="actions-column">
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
 
 
-  <div class="users-table-wrapper">
-
-    <table class="users-table">
-
-      <thead>
-        <tr>
-          <th>User</th>
-          <th>Email</th>
-          <th class="actions-column">Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-
-        <tr>
-          <td>
-            <div class="user-info">
-              <div class="user-avatar">A</div>
-              <span>Ayleen Abu Shawish</span>
-            </div>
-          </td>
-
-          <td>ayleen@email.com</td>
+        <tbody>
 
 
-          <td>
-            <div class="user-actions">
+          <tr>
 
-              <button title="View Details">
-                <i class="bi bi-eye"></i>
-              </button>
+            <td>
 
-              <button title="Edit">
-                <i class="bi bi-pencil"></i>
-              </button>
+              <div class="user-info">
 
-              <button title="Delete" class="delete-btn">
-                <i class="bi bi-trash3"></i>
-              </button>
+                <div class="user-avatar">
+                  A
+                </div>
 
-            </div>
-          </td>
-        </tr>
+                <span>
+                  Ayleen Abu Shawish
+                </span>
 
+              </div>
 
-        <tr>
-          <td>
-            <div class="user-info">
-              <div class="user-avatar">S</div>
-              <span>Sara Ahmad</span>
-            </div>
-          </td>
-
-          <td>sara@email.com</td>
+            </td>
 
 
-          <td>
-            <div class="user-actions">
-
-              <button title="View Details">
-                <i class="bi bi-eye"></i>
-              </button>
-
-              <button title="Edit">
-                <i class="bi bi-pencil"></i>
-              </button>
-
-              <button title="Delete" class="delete-btn">
-                <i class="bi bi-trash3"></i>
-              </button>
-
-            </div>
-          </td>
-        </tr>
+            <td>
+              ayleen@email.com
+            </td>
 
 
-        <tr>
-          <td>
-            <div class="user-info">
-              <div class="user-avatar">O</div>
-              <span>Omar Khaled</span>
-            </div>
-          </td>
+            <td>
 
-          <td>omar@email.com</td>
+              <div class="user-actions">
+
+                <button title="View Details">
+                  <i class="bi bi-eye"></i>
+                </button>
+
+                <button title="Edit">
+                  <i class="bi bi-pencil"></i>
+                </button>
+
+                <button
+                  title="Delete"
+                  class="delete-btn">
+                  <i class="bi bi-trash3"></i>
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
 
 
-          <td>
-            <div class="user-actions">
 
-              <button title="View Details">
-                <i class="bi bi-eye"></i>
-              </button>
+          <tr>
 
-              <button title="Edit">
-                <i class="bi bi-pencil"></i>
-              </button>
+            <td>
 
-              <button title="Delete" class="delete-btn">
-                <i class="bi bi-trash3"></i>
-              </button>
+              <div class="user-info">
 
-            </div>
-          </td>
-        </tr>
+                <div class="user-avatar">
+                  S
+                </div>
 
-      </tbody>
+                <span>
+                  Sara Ahmad
+                </span>
 
-    </table>
+              </div>
 
-  </div>
+            </td>
 
-</section>
-<footer class="footer">
-  <span>© 2026 LOCK IN. All rights reserved.</span>
-</footer>
+
+            <td>
+              sara@email.com
+            </td>
+
+
+            <td>
+
+              <div class="user-actions">
+
+                <button title="View Details">
+                  <i class="bi bi-eye"></i>
+                </button>
+
+                <button title="Edit">
+                  <i class="bi bi-pencil"></i>
+                </button>
+
+                <button
+                  title="Delete"
+                  class="delete-btn">
+                  <i class="bi bi-trash3"></i>
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+
+
+          <tr>
+
+            <td>
+
+              <div class="user-info">
+
+                <div class="user-avatar">
+                  O
+                </div>
+
+                <span>
+                  Omar Khaled
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <td>
+              omar@email.com
+            </td>
+
+
+            <td>
+
+              <div class="user-actions">
+
+                <button title="View Details">
+                  <i class="bi bi-eye"></i>
+                </button>
+
+                <button title="Edit">
+                  <i class="bi bi-pencil"></i>
+                </button>
+
+                <button
+                  title="Delete"
+                  class="delete-btn">
+                  <i class="bi bi-trash3"></i>
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+
+
+  <footer class="footer">
+
+    <span>
+      © 2026 LOCK IN. All rights reserved.
+    </span>
+
+  </footer>
+
+</div>
