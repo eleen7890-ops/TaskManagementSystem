@@ -75,6 +75,74 @@
       </div>
 
       <span class="task-count">
+        {{ tasks.filter(t => t.status === 0).length }}
+      </span>
+    </div>
+
+    <div class="task-list">
+
+      <div
+        class="task-item"
+        *ngFor="let task of tasks"
+      >
+
+        <ng-container *ngIf="task.status === 0">
+
+          <div class="task-info">
+            <h4>{{ task.title }}</h4>
+
+            <div class="task-meta">
+
+              <span>
+                <i class="bi bi-person"></i>
+                {{ task.fullName }}
+              </span>
+
+              <span>
+                <i class="bi bi-calendar3"></i>
+                {{ task.dueDate | date:'MMM d' }}
+              </span>
+
+            </div>
+          </div>
+
+          <div class="task-actions">
+
+            <button title="View Details">
+              <i class="bi bi-eye"></i>
+            </button>
+
+            <button title="Edit">
+              <i class="bi bi-pencil"></i>
+            </button>
+
+            <button
+              title="Delete"
+              class="delete-btn"
+            >
+              <i class="bi bi-trash3"></i>
+            </button>
+
+          </div>
+
+        </ng-container>
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- IN PROGRESS -->
+  <div class="task-column">
+
+    <div class="column-header">
+      <div>
+        <h3>In Progress</h3>
+        <span>Tasks currently being worked on</span>
+      </div>
+
+      <span class="task-count">
         {{ tasks.filter(t => t.status === 1).length }}
       </span>
     </div>
@@ -133,13 +201,13 @@
   </div>
 
 
-  <!-- IN PROGRESS -->
+  <!-- COMPLETED -->
   <div class="task-column">
 
     <div class="column-header">
       <div>
-        <h3>In Progress</h3>
-        <span>Tasks currently being worked on</span>
+        <h3>Completed</h3>
+        <span>Finished tasks</span>
       </div>
 
       <span class="task-count">
@@ -155,74 +223,6 @@
       >
 
         <ng-container *ngIf="task.status === 2">
-
-          <div class="task-info">
-            <h4>{{ task.title }}</h4>
-
-            <div class="task-meta">
-
-              <span>
-                <i class="bi bi-person"></i>
-                {{ task.fullName }}
-              </span>
-
-              <span>
-                <i class="bi bi-calendar3"></i>
-                {{ task.dueDate | date:'MMM d' }}
-              </span>
-
-            </div>
-          </div>
-
-          <div class="task-actions">
-
-            <button title="View Details">
-              <i class="bi bi-eye"></i>
-            </button>
-
-            <button title="Edit">
-              <i class="bi bi-pencil"></i>
-            </button>
-
-            <button
-              title="Delete"
-              class="delete-btn"
-            >
-              <i class="bi bi-trash3"></i>
-            </button>
-
-          </div>
-
-        </ng-container>
-
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- COMPLETED -->
-  <div class="task-column">
-
-    <div class="column-header">
-      <div>
-        <h3>Completed</h3>
-        <span>Finished tasks</span>
-      </div>
-
-      <span class="task-count">
-        {{ tasks.filter(t => t.status === 3).length }}
-      </span>
-    </div>
-
-    <div class="task-list">
-
-      <div
-        class="task-item"
-        *ngFor="let task of tasks"
-      >
-
-        <ng-container *ngIf="task.status === 3">
 
           <div class="task-info">
             <h4>{{ task.title }}</h4>

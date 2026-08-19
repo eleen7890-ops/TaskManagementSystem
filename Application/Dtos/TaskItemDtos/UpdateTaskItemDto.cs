@@ -20,10 +20,10 @@ namespace Application.Dtos.TaskItemDtos
         public DateTime DueDate { get; set; }
 
         [Required(ErrorMessage = "Status Is Required")]
-        public TaskStatusEnum Status { get; set; }
+        public TaskPriorityEnum Status { get; set; }
 
         [Required(ErrorMessage = "Priority Is Required")]
-        public TaskPriorityEnum Priority { get; set; }
+        public TaskStatusEnum Priority { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "User Is Required")]
 
         public int UserId { get; set; }

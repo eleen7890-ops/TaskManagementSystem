@@ -39,7 +39,7 @@ namespace Application.Services
             return repository.DeleteAsync(id);
         }
 
-        public async Task<IReadOnlyList<TaskItemDto>> FilterAsync(TaskStatusEnum? status, TaskPriorityEnum? priority)
+        public async Task<IReadOnlyList<TaskItemDto>> FilterAsync(TaskPriorityEnum? status, TaskStatusEnum? priority)
         {
             var tasks = await repository.FilterAsync(status, priority);
             return tasks.Select(item => new TaskItemDto

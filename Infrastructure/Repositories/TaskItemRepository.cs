@@ -37,7 +37,7 @@ namespace Infrastructure.Repositories
             return true;
         }
 
-        public async Task<IReadOnlyList<TaskItem>> FilterAsync(TaskStatusEnum? status, TaskPriorityEnum? priority)
+        public async Task<IReadOnlyList<TaskItem>> FilterAsync(TaskPriorityEnum? status, TaskStatusEnum? priority)
         {
             var query = dbContext.TaskItems.Include(x => x.User).AsQueryable();
             if (status.HasValue)
