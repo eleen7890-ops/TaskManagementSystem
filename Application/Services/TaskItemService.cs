@@ -56,7 +56,10 @@ namespace Application.Services
         public async Task<IReadOnlyList<TaskItemDto>> GetAllAsync()
         {
             var tasks = await repository.GetAllAsync();
-            return tasks.Select(item => new TaskItemDto { DueDate = item.DueDate,Title=item.Title, FullName = item.User.FullName }).ToList();
+            return tasks.Select(item => new TaskItemDto { DueDate = item.DueDate,Title=item.Title, FullName = item.User.FullName,
+                Status = item.Status,
+                Priority = item.Priority
+            }).ToList();
         }
 
         public async Task<DetailsTaskItemDto?> GetByIdAsync(int id)
