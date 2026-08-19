@@ -9,7 +9,7 @@ namespace Application.Dtos.TaskItemDtos
 {
     public class TaskItemDto
     {
-
+        public int TaskId { get; set; }
         public string Title { get; set; } = string.Empty;
         public DateTime? DueDate { get; set; }
         public string? FullName { get; set; }

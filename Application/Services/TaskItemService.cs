@@ -44,6 +44,7 @@ namespace Application.Services
             var tasks = await repository.FilterAsync(status, priority);
             return tasks.Select(item => new TaskItemDto
             {
+                TaskId = item.TaskId,
                 Title = item.Title,
                 DueDate = item.DueDate,
                 FullName = item.User?.FullName,
@@ -56,7 +57,7 @@ namespace Application.Services
         public async Task<IReadOnlyList<TaskItemDto>> GetAllAsync()
         {
             var tasks = await repository.GetAllAsync();
-            return tasks.Select(item => new TaskItemDto { DueDate = item.DueDate,Title=item.Title, FullName = item.User.FullName,
+            return tasks.Select(item => new TaskItemDto {TaskId=item.TaskId, DueDate = item.DueDate,Title=item.Title, FullName = item.User.FullName,
                 Status = item.Status,
                 Priority = item.Priority
             }).ToList();
