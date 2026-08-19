@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { TaskDetails } from "../models/task-details";
 import { CreateTask } from "../models/create-task";
+import { User } from "../models/user";
 @Injectable({
   providedIn: "root",
 })
