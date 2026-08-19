@@ -65,13 +65,33 @@
 
  <section class="task-board">
 
-  <!-- TO DO -->
-  <div class="task-column">
 
-    <div class="column-header">
-      <div>
-        <h3>To Do</h3>
-        <span>Tasks that haven't started</span>
+  <section class="tasks-header">
+
+    <div class="tasks-title">
+      <h2>Tasks</h2>
+      <span>Manage and organize your work</span>
+    </div>
+
+    <div class="tasks-actions">
+
+      <button class="filter-btn">
+        <i class="bi bi-funnel"></i>
+        <span>Filter</span>
+      </button>
+
+      <div class="search-box">
+
+        <input
+          type="search"
+          placeholder="Search tasks..."
+          aria-label="Search tasks"
+        >
+
+        <button type="button" class="search-btn">
+          <i class="bi bi-search"></i>
+        </button>
+
       </div>
 
       <span class="task-count">
@@ -79,7 +99,7 @@
       </span>
     </div>
 
-    <div class="task-list">
+  </section>
 
       <div
         class="task-item"
@@ -130,16 +150,22 @@
       </div>
 
     </div>
-  </div>
 
 
-  <!-- IN PROGRESS -->
-  <div class="task-column">
 
-    <div class="column-header">
-      <div>
-        <h3>In Progress</h3>
-        <span>Tasks currently being worked on</span>
+    <!-- IN PROGRESS -->
+
+    <div class="task-column">
+
+      <div class="column-header">
+
+        <div>
+          <h3>In Progress</h3>
+          <span>Tasks currently being worked on</span>
+        </div>
+
+        <span class="task-count">1</span>
+
       </div>
 
       <span class="task-count">
@@ -147,7 +173,7 @@
       </span>
     </div>
 
-    <div class="task-list">
+      <div class="task-list">
 
       <div
         class="task-item"
@@ -198,16 +224,22 @@
       </div>
 
     </div>
-  </div>
 
 
-  <!-- COMPLETED -->
-  <div class="task-column">
 
-    <div class="column-header">
-      <div>
-        <h3>Completed</h3>
-        <span>Finished tasks</span>
+    <!-- COMPLETED -->
+
+    <div class="task-column">
+
+      <div class="column-header">
+
+        <div>
+          <h3>Completed</h3>
+          <span>Finished tasks</span>
+        </div>
+
+        <span class="task-count">2</span>
+
       </div>
 
       <span class="task-count">
@@ -215,7 +247,9 @@
       </span>
     </div>
 
-    <div class="task-list">
+      <div class="task-list">
+
+        <div class="task-item">
 
       <div
         class="task-item"
@@ -266,7 +300,6 @@
       </div>
 
     </div>
-  </div>
 
 </section>
 
