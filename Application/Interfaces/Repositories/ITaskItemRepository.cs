@@ -12,7 +12,7 @@ namespace Application.Interfaces.Repositories
     {
         Task<IReadOnlyList<TaskItem>> GetAllAsync();
         Task<TaskItem?> GetByIdAsync(int id);
-        Task<IReadOnlyList<TaskItem>> FilterAsync(TaskStatusEnum? status,TaskPriorityEnum? priority);
+        Task<IReadOnlyList<TaskItem>> FilterAsync(TaskPriorityEnum? status,TaskStatusEnum? priority);
         Task<int> CreateAsync(TaskItem taskItem);
         Task<bool> UpdateAsync(TaskItem taskItem);
         Task<bool> DeleteAsync(int id);
