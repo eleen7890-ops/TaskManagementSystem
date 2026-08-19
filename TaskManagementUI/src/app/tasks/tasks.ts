@@ -7,7 +7,7 @@ import { TaskService } from '../services/task.service';
   selector: 'app-tasks',
   imports: [DatePipe, NgClass, NgFor, NgIf],
   templateUrl: './tasks.html',
-  styleUrl: './tasks.css',
+  styleUrl: './tasks.css'
 })
 export class Tasks implements OnInit {
   isDarkMode = false;
@@ -28,6 +28,26 @@ export class Tasks implements OnInit {
       error: (error) => {
         console.error('Error loading tasks:', error);
       },
+    });
+  }
+
+  tasks: Task[] = [];
+
+  constructor(private taskService: TaskService) {}
+
+  ngOnInit(): void {
+    this.loadTasks();
+  }
+
+  loadTasks(): void {
+    this.taskService.getTasks().subscribe({
+      next: (data) => {
+        this.tasks = data;
+        console.log(this.tasks);
+      },
+      error: (error) => {
+        console.error('Error loading tasks:', error);
+      }
     });
   }
 
