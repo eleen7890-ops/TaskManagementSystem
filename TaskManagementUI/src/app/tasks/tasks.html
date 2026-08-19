@@ -31,7 +31,32 @@
       <h2>Tasks</h2>
       <span>Manage and organize your work</span>
     </div>
+<section class="task-statistics">
 
+  <div class="stat-total">
+    <span class="stat-label">Total Tasks</span>
+    <span class="stat-number">{{ totalTasks }}</span>
+  </div>
+
+  <div class="priority-stat">
+    <span class="priority-dot low"></span>
+    <span>Low</span>
+    <strong>{{ lowPriorityTasks }}</strong>
+  </div>
+
+  <div class="priority-stat">
+    <span class="priority-dot medium"></span>
+    <span>Medium</span>
+    <strong>{{ mediumPriorityTasks }}</strong>
+  </div>
+
+  <div class="priority-stat">
+    <span class="priority-dot high"></span>
+    <span>High</span>
+    <strong>{{ highPriorityTasks }}</strong>
+  </div>
+
+</section>
     <div class="tasks-actions">
 
       <button class="filter-btn">
@@ -53,11 +78,10 @@
 
       </div>
 
-      <button class="add-task-btn">
-        <i class="bi bi-plus-lg"></i>
-        Add Task
-      </button>
-
+      <button class="add-task-btn" (click)="openAddTask()">
+  <i class="bi bi-plus-lg"></i>
+  Add Task
+</button>
     </div>
 
   </section>
@@ -79,12 +103,34 @@
               <h4>{{ task.title }}</h4>
               <div class="task-meta">
                 <span><i class="bi bi-person"></i>{{ task.fullName }}</span>
-                <span><i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}</span>
+                <span *ngIf="task.dueDate">
+                  <i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}
+                </span>
+           <span
+  *ngIf="task.dueDate && isOverdue(task.dueDate)"
+  class="overdue">
+  ⚠ Overdue
+</span>
+
+                  <span class="priority">
+    <span
+      class="priority-dot"
+      [class.low]="task.priority === 1"
+      [class.medium]="task.priority === 2"
+      [class.high]="task.priority === 3">
+    </span>
+
+    {{ task.priority === 1 ? 'Low' : task.priority === 2 ? 'Medium' : 'High' }}
+  </span>
               </div>
             </div>
             <div class="task-actions">
-              <button title="View Details"><i class="bi bi-eye"></i></button>
-              <button title="Edit"><i class="bi bi-pencil"></i></button>
+<button
+  title="View Details"
+  (click)="viewTask(task.taskId)">
+  <i class="bi bi-eye"></i>
+</button>
+             <button title="Edit"><i class="bi bi-pencil"></i></button>
               <button title="Delete" class="delete-btn"><i class="bi bi-trash3"></i></button>
             </div>
           </div>
@@ -107,12 +153,33 @@
               <h4>{{ task.title }}</h4>
               <div class="task-meta">
                 <span><i class="bi bi-person"></i>{{ task.fullName }}</span>
-                <span><i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}</span>
+                <span *ngIf="task.dueDate">
+                  <i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}
+                </span>
+<span
+  *ngIf="task.dueDate && isOverdue(task.dueDate)"
+  class="overdue">
+  ⚠ Overdue
+</span>
+                  <span class="priority">
+    <span
+      class="priority-dot"
+      [class.low]="task.priority === 1"
+      [class.medium]="task.priority === 2"
+      [class.high]="task.priority === 3">
+    </span>
+
+    {{ task.priority === 1 ? 'Low' : task.priority === 2 ? 'Medium' : 'High' }}
+  </span>
               </div>
             </div>
             <div class="task-actions">
-              <button title="View Details"><i class="bi bi-eye"></i></button>
-              <button title="Edit"><i class="bi bi-pencil"></i></button>
+            <button
+  title="View Details"
+  (click)="viewTask(task.taskId)">
+  <i class="bi bi-eye"></i>
+</button>
+     <button title="Edit"><i class="bi bi-pencil"></i></button>
               <button title="Delete" class="delete-btn"><i class="bi bi-trash3"></i></button>
             </div>
           </div>
@@ -135,11 +202,28 @@
               <h4>{{ task.title }}</h4>
               <div class="task-meta">
                 <span><i class="bi bi-person"></i>{{ task.fullName }}</span>
-                <span><i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}</span>
+                <span *ngIf="task.dueDate">
+                  <i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}
+                </span>
+
+   <span class="priority">
+    <span
+      class="priority-dot"
+      [class.low]="task.priority === 1"
+      [class.medium]="task.priority === 2"
+      [class.high]="task.priority === 3">
+    </span>
+
+    {{ task.priority === 1 ? 'Low' : task.priority === 2 ? 'Medium' : 'High' }}
+  </span>
               </div>
             </div>
             <div class="task-actions">
-              <button title="View Details"><i class="bi bi-eye"></i></button>
+<button
+  title="View Details"
+  (click)="viewTask(task.taskId)">
+  <i class="bi bi-eye"></i>
+</button>
               <button title="Edit"><i class="bi bi-pencil"></i></button>
               <button title="Delete" class="delete-btn"><i class="bi bi-trash3"></i></button>
             </div>
@@ -360,5 +444,196 @@
     </span>
 
   </footer>
+<div class="details-overlay" *ngIf="selectedTask">
 
+  <div class="details-popup">
+
+    <div class="details-header">
+      <div>
+        <h2>Task Details</h2>
+        <span>View task information</span>
+      </div>
+
+      <button
+        class="close-details"
+        (click)="closeDetails()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="details-content">
+
+      <div class="details-title">
+        {{ selectedTask.title }}
+      </div>
+
+      <div class="details-description">
+        <span class="details-label">Description</span>
+
+        <p>
+          {{ selectedTask.description || 'No description provided.' }}
+        </p>
+      </div>
+
+      <div class="details-info">
+
+        <div class="details-info-item">
+          <i class="bi bi-person"></i>
+
+          <div>
+            <span>Assigned To</span>
+            <strong>{{ selectedTask.fullName || 'Unassigned' }}</strong>
+          </div>
+        </div>
+
+        <div class="details-info-item">
+          <i class="bi bi-calendar3"></i>
+
+          <div>
+            <span>Due Date</span>
+            <strong>
+              {{ selectedTask.dueDate | date:'MMM d, yyyy' }}
+            </strong>
+          </div>
+        </div>
+
+        <div class="details-info-item">
+          <i class="bi bi-flag"></i>
+
+          <div>
+            <span>Priority</span>
+
+            <strong>
+              {{
+                selectedTask.priority === 1
+                  ? 'Low'
+                  : selectedTask.priority === 2
+                  ? 'Medium'
+                  : 'High'
+              }}
+            </strong>
+          </div>
+        </div>
+
+        <div class="details-info-item">
+          <i class="bi bi-check-circle"></i>
+
+          <div>
+            <span>Status</span>
+
+            <strong>
+              {{
+                selectedTask.status === 1
+                  ? 'To Do'
+                  : selectedTask.status === 2
+                  ? 'In Progress'
+                  : 'Completed'
+              }}
+            </strong>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="details-footer">
+      <button
+        class="close-btn"
+        (click)="closeDetails()">
+        Close
+      </button>
+    </div>
+
+  </div>
+
+</div>
+<div class="details-overlay" *ngIf="showAddTask">
+
+  <div class="details-popup">
+
+    <div class="details-header">
+      <div>
+        <h2>Add Task</h2>
+        <span>Create a new task</span>
+      </div>
+
+      <button
+        class="close-details"
+        (click)="closeAddTask()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="details-content">
+
+      <div class="form-group">
+        <label>Title</label>
+        <input
+          type="text"
+          [(ngModel)]="newTask.title"
+          placeholder="Enter task title">
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea
+          [(ngModel)]="newTask.description"
+          placeholder="Enter description">
+        </textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Due Date</label>
+        <input
+          type="date"
+          [(ngModel)]="newTask.dueDate">
+      </div>
+
+      <div class="form-group">
+        <label>Status</label>
+        <select [(ngModel)]="newTask.status">
+          <option [ngValue]="0" disabled>Select status</option>
+          <option [ngValue]="1">To Do</option>
+          <option [ngValue]="2">In Progress</option>
+          <option [ngValue]="3">Completed</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Priority</label>
+        <select [(ngModel)]="newTask.priority">
+          <option [ngValue]="0" disabled>Select priority</option>
+          <option [ngValue]="1">Low</option>
+          <option [ngValue]="2">Medium</option>
+          <option [ngValue]="3">High</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>User ID</label>
+        <input
+          type="number"
+          [(ngModel)]="newTask.userId"
+          min="1"
+          placeholder="Enter user ID">
+      </div>
+
+    </div>
+
+    <div class="details-footer">
+      <button
+        class="close-btn"
+        (click)="closeAddTask()">
+        Cancel
+      </button>
+
+      <button class="add-task-btn">
+        Add Task
+      </button>
+    </div>
+
+  </div>
+
+</div>
 </div>

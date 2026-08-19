@@ -1,19 +1,74 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Task } from '../models/task';
 import { TaskService } from '../services/task.service';
-
+import { TaskDetails } from '../models/task-details';
+import { CreateTask } from '../models/create-task';
 @Component({
   selector: 'app-tasks',
-  imports: [DatePipe, NgClass, NgFor, NgIf],
+  imports: [DatePipe, NgClass, NgFor, NgIf, FormsModule],
   templateUrl: './tasks.html',
   styleUrl: './tasks.css'
 })
 export class Tasks implements OnInit {
   isDarkMode = false;
   tasks: Task[] = [];
+   showAddTask = false;
 
-  constructor(private readonly taskService: TaskService) {}
+  newTask: CreateTask = {
+    title: '',
+    description: '',
+    dueDate: '',
+    status:0,
+    priority: 0,
+    userId: 0
+  };
+openAddTask(): void {
+  this.showAddTask = true;
+}
+closeAddTask(): void {
+  this.showAddTask = false;
+}
+
+  selectedTask: TaskDetails | null = null;
+  viewTask(id: number): void {
+  this.taskService.getTaskById(id).subscribe({
+    next: (task) => {
+      this.selectedTask = task;
+      console.log('Selected task:', task);
+    },
+    
+    error: (error) => {
+      console.error('Error loading task details:', error);
+    }
+  });
+}
+
+  closeDetails(): void {
+    this.selectedTask = null;
+  }
+
+get totalTasks(): number {
+  return this.tasks.length;
+}
+
+
+get lowPriorityTasks(): number {
+  return this.tasks.filter(task => task.priority === 1).length;
+}
+
+get mediumPriorityTasks(): number {
+  return this.tasks.filter(task => task.priority === 2).length;
+}
+
+get highPriorityTasks(): number {
+  return this.tasks.filter(task => task.priority === 3).length;
+}
+  constructor(
+    private readonly taskService: TaskService,
+    private readonly changeDetector: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     this.loadTasks();
@@ -23,6 +78,7 @@ export class Tasks implements OnInit {
     this.taskService.getTasks().subscribe({
       next: (data) => {
         this.tasks = data;
+        this.changeDetector.detectChanges();
         console.log(this.tasks);
       },
       error: (error) => {
@@ -31,7 +87,19 @@ export class Tasks implements OnInit {
     });
   }
 
+  isOverdue(dueDate: string): boolean {
+    const due = new Date(dueDate);
+    due.setHours(0, 0, 0, 0);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return due < today;
+  }
+
   toggleTheme(): void {
     this.isDarkMode = !this.isDarkMode;
   }
+
 }
+
