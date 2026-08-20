@@ -26,7 +26,8 @@ namespace TaskManagement.Controllers
         public async Task<IActionResult> GetUserById(int id)
         {
             var user = await userService.GetByIdAsync(id);
-            return Ok(id);
+            if (user == null) return NotFound();
+            return Ok(user);
         }
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserDto createUserDto)
@@ -46,7 +47,13 @@ namespace TaskManagement.Controllers
         public async Task<IActionResult> DeleteUser(int id)
         {
             var deletedUser = await userService.DeleteAsync(id);
-            if (!deletedUser) return NotFound();
+            if (!deletedUser)
+            {
+                return Conflict(new
+                {
+                    message = "This user cannot be deleted because they have assigned tasks."
+                });
+            }
             return NoContent();
         }
     }
