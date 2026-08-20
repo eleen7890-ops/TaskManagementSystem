@@ -79,6 +79,7 @@
 }
 
 .tasks-actions {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -105,6 +106,58 @@
 
 .filter-btn:hover {
   background: #904568;
+}
+
+.filter-panel {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin-top: 0;
+  padding: 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.filter-panel label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: #666;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.filter-panel select {
+  min-width: 130px;
+  height: 34px;
+  padding: 0 8px;
+  border: 1px solid #e5e5e5;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #333;
+  font-size: 12px;
+}
+
+.clear-filters-btn {
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid #e5e5e5;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #772149;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.clear-filters-btn:hover {
+  background: #f8f0f4;
 }
 
 .search-box {
@@ -165,6 +218,46 @@
   background: #f8f8f9;
   border: 1px solid #eeeeee;
   border-radius: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.task-column.drop-target {
+  border-color: #c76b98;
+  box-shadow: 0 0 0 3px rgba(199, 107, 152, 0.16);
+  transform: translateY(-3px);
+  animation: drop-target-pulse 0.9s ease-in-out infinite alternate;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: -25px 40px 50px;
+  color: #666;
+  font-size: 13px;
+}
+
+.pagination button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #e5e5e5;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #772149;
+  cursor: pointer;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: #f8f0f4;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
 }
 
 .column-header {
@@ -209,6 +302,13 @@
   gap: 12px;
 }
 
+.empty-state {
+  margin: 18px 0 8px;
+  color: #999;
+  font-size: 13px;
+  text-align: center;
+}
+
 .task-item {
   padding: 16px;
   background: #ffffff;
@@ -220,6 +320,31 @@
 .task-item:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+}
+
+.task-item[draggable="true"] {
+  cursor: grab;
+}
+
+.task-item.dragging {
+  opacity: 0.45;
+  cursor: grabbing;
+  transform: rotate(1deg) scale(1.02);
+}
+
+@keyframes drop-target-pulse {
+  from {
+    box-shadow: 0 0 0 3px rgba(199, 107, 152, 0.12);
+  }
+  to {
+    box-shadow: 0 0 0 6px rgba(199, 107, 152, 0.22);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .task-column.drop-target {
+    animation: none;
+  }
 }
 
 .task-info h4 {
@@ -331,6 +456,12 @@
   border-top: 1px solid #eeeeee;
   color: #555;
   font-size: 13px;
+}
+
+.users-table .empty-table-state {
+  padding: 32px 20px;
+  color: #999;
+  text-align: center;
 }
 
 .users-table tbody tr {
@@ -496,6 +627,14 @@
 
 .page.dark-mode .search-box input::placeholder {
   color: #888;
+}
+
+.page.dark-mode .filter-panel,
+.page.dark-mode .filter-panel select,
+.page.dark-mode .clear-filters-btn {
+  border-color: #40383c;
+  background: #252124;
+  color: #eeeeee;
 }
 
 .page.dark-mode .search-btn {

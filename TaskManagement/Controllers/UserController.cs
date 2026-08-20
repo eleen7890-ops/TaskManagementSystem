@@ -46,7 +46,13 @@ namespace TaskManagement.Controllers
         public async Task<IActionResult> DeleteUser(int id)
         {
             var deletedUser = await userService.DeleteAsync(id);
-            if (!deletedUser) return NotFound();
+            if (!deletedUser)
+            {
+                return Conflict(new
+                {
+                    message = "This user cannot be deleted because they have assigned tasks."
+                });
+            }
             return NoContent();
         }
     }

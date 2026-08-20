@@ -31,7 +31,7 @@ namespace TaskManagement.Controllers
 
         }
         [HttpGet("filter")]
-        public async Task<IActionResult> Filter([FromQuery] TaskPriorityEnum? status,[FromQuery] TaskStatusEnum? priority)
+        public async Task<IActionResult> Filter([FromQuery] TaskStatusEnum? status, [FromQuery] TaskPriorityEnum? priority)
         {
             var tasks = await taskItemService.FilterAsync(status, priority);
 

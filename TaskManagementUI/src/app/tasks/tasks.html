@@ -59,15 +59,39 @@
 </section>
     <div class="tasks-actions">
 
-      <button class="filter-btn">
+      <button class="filter-btn" type="button" (click)="showFilters = !showFilters" [attr.aria-expanded]="showFilters">
         <i class="bi bi-funnel"></i>
         <span>Filter</span>
       </button>
+
+      <div class="filter-panel" *ngIf="showFilters">
+        <label>
+          Status
+          <select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+            <option [ngValue]="0">All statuses</option>
+            <option [ngValue]="1">To Do</option>
+            <option [ngValue]="2">In Progress</option>
+            <option [ngValue]="3">Completed</option>
+          </select>
+        </label>
+        <label>
+          Priority
+          <select [(ngModel)]="priorityFilter" (ngModelChange)="applyFilters()">
+            <option [ngValue]="0">All priorities</option>
+            <option [ngValue]="1">Low</option>
+            <option [ngValue]="2">Medium</option>
+            <option [ngValue]="3">High</option>
+          </select>
+        </label>
+        <button type="button" class="clear-filters-btn" (click)="clearFilters()">Clear</button>
+      </div>
 
       <div class="search-box">
 
         <input
           type="search"
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="resetPagination()"
           placeholder="Search tasks..."
           aria-label="Search tasks"
         >
@@ -89,17 +113,23 @@
 
 
   <section class="task-board">
-    <div class="task-column">
+    <div class="task-column" [class.drop-target]="dragOverStatus === 1" (dragover)="onDragOver(1, $event)" (drop)="onDrop(1, $event)">
       <div class="column-header">
         <div>
           <h3>To Do</h3>
           <span>Tasks that haven't started</span>
         </div>
-        <span class="task-count">{{ tasks.filter(t => t.status === 1).length }}</span>
+        <span class="task-count">{{ filteredTasks.filter(t => t.status === 1).length }}</span>
       </div>
       <div class="task-list">
-        <ng-container *ngFor="let task of tasks">
-          <div class="task-item" *ngIf="task.status === 1">
+        <ng-container *ngFor="let task of paginatedTasks">
+          <div
+            class="task-item"
+            [class.dragging]="draggedTask?.taskId === task.taskId"
+            draggable="true"
+            (dragstart)="onDragStart(task)"
+            (dragend)="onDragEnd()"
+            *ngIf="task.status === 1">
             <div class="task-info">
               <h4>{{ task.title }}</h4>
               <div class="task-meta">
@@ -141,20 +171,29 @@
             </div>
           </div>
         </ng-container>
+        <p class="empty-state" *ngIf="paginatedTasks.filter(t => t.status === 1).length === 0">
+          {{ searchTerm || statusFilter !== 0 || priorityFilter !== 0 ? 'No tasks found' : 'No tasks to do' }}
+        </p>
       </div>
     </div>
 
-    <div class="task-column">
+    <div class="task-column" [class.drop-target]="dragOverStatus === 2" (dragover)="onDragOver(2, $event)" (drop)="onDrop(2, $event)">
       <div class="column-header">
         <div>
           <h3>In Progress</h3>
           <span>Tasks currently being worked on</span>
         </div>
-        <span class="task-count">{{ tasks.filter(t => t.status === 2).length }}</span>
+        <span class="task-count">{{ filteredTasks.filter(t => t.status === 2).length }}</span>
       </div>
       <div class="task-list">
-        <ng-container *ngFor="let task of tasks">
-          <div class="task-item" *ngIf="task.status === 2">
+        <ng-container *ngFor="let task of paginatedTasks">
+          <div
+            class="task-item"
+            [class.dragging]="draggedTask?.taskId === task.taskId"
+            draggable="true"
+            (dragstart)="onDragStart(task)"
+            (dragend)="onDragEnd()"
+            *ngIf="task.status === 2">
             <div class="task-info">
               <h4>{{ task.title }}</h4>
               <div class="task-meta">
@@ -195,20 +234,29 @@
             </div>
           </div>
         </ng-container>
+        <p class="empty-state" *ngIf="paginatedTasks.filter(t => t.status === 2).length === 0">
+          {{ searchTerm || statusFilter !== 0 || priorityFilter !== 0 ? 'No tasks found' : 'No tasks in progress' }}
+        </p>
       </div>
     </div>
 
-    <div class="task-column">
+    <div class="task-column" [class.drop-target]="dragOverStatus === 3" (dragover)="onDragOver(3, $event)" (drop)="onDrop(3, $event)">
       <div class="column-header">
         <div>
           <h3>Completed</h3>
           <span>Finished tasks</span>
         </div>
-        <span class="task-count">{{ tasks.filter(t => t.status === 3).length }}</span>
+        <span class="task-count">{{ filteredTasks.filter(t => t.status === 3).length }}</span>
       </div>
       <div class="task-list">
-        <ng-container *ngFor="let task of tasks">
-          <div class="task-item" *ngIf="task.status === 3">
+        <ng-container *ngFor="let task of paginatedTasks">
+          <div
+            class="task-item"
+            [class.dragging]="draggedTask?.taskId === task.taskId"
+            draggable="true"
+            (dragstart)="onDragStart(task)"
+            (dragend)="onDragEnd()"
+            *ngIf="task.status === 3">
             <div class="task-info">
               <h4>{{ task.title }}</h4>
               <div class="task-meta">
@@ -245,9 +293,22 @@
             </div>
           </div>
         </ng-container>
+        <p class="empty-state" *ngIf="paginatedTasks.filter(t => t.status === 3).length === 0">
+          {{ searchTerm || statusFilter !== 0 || priorityFilter !== 0 ? 'No tasks found' : 'No completed tasks' }}
+        </p>
       </div>
     </div>
   </section>
+
+  <nav class="pagination" *ngIf="totalPages > 1" aria-label="Task pages">
+    <button type="button" (click)="previousPage()" [disabled]="currentPage === 1" aria-label="Previous page">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button type="button" (click)="nextPage()" [disabled]="currentPage === totalPages" aria-label="Next page">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </nav>
 
 
 
@@ -327,6 +388,9 @@
                 </button>
               </div>
             </td>
+          </tr>
+          <tr *ngIf="users.length === 0">
+            <td class="empty-table-state" colspan="3">No users found</td>
           </tr>
         </tbody>
 
@@ -633,8 +697,8 @@
   <div class="details-popup delete-popup" role="alertdialog" aria-modal="true">
     <div class="details-header">
       <div>
-        <h2>Delete User</h2>
-        <span>Remove this user permanently</span>
+        <h2>{{ userDeleteError ? 'User cannot be deleted' : 'Delete User' }}</h2>
+        <span>{{ userDeleteError ? 'Resolve the assigned tasks first' : 'Remove this user permanently' }}</span>
       </div>
       <button type="button" class="close-details" (click)="cancelDeleteUser()">
         <i class="bi bi-x-lg"></i>
@@ -643,11 +707,12 @@
 
     <div class="details-content delete-content">
       <div class="delete-icon"><i class="bi bi-trash3"></i></div>
-      <p>Are you sure you want to delete <strong>{{ userToDelete.fullName }}</strong>?</p>
+      <p *ngIf="!userDeleteError">Are you sure you want to delete <strong>{{ userToDelete.fullName }}</strong>?</p>
+      <p class="form-error" *ngIf="userDeleteError">{{ userDeleteError }}</p>
     </div>
 
     <div class="details-footer delete-actions">
-      <button type="button" class="confirm-delete-btn" (click)="deleteUser(userToDelete.userId)">
+      <button type="button" class="confirm-delete-btn" *ngIf="!userDeleteError" (click)="deleteUser(userToDelete.userId)">
         <i class="bi bi-trash3"></i>
         Delete user
       </button>
