@@ -206,6 +206,7 @@ GET    /api/Task/{id}
 POST   /api/Task
 PUT    /api/Task/{id}
 DELETE /api/Task/{id}
+GET    /api/TaskItem/filter
 ```
 
 ### Users
