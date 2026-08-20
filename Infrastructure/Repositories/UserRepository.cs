@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -28,13 +29,18 @@ namespace Infrastructure.Repositories
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var user= dbContext.Users.Find(id);
+            var user = await dbContext.Users.FindAsync(id);
             if (user == null) return false;
+
+            bool hasTasks = await dbContext.TaskItems.AnyAsync(t => t.UserId == id);
+            if (hasTasks) return false;
+
             dbContext.Users.Remove(user);
             await dbContext.SaveChangesAsync();
             return true;
-
         }
+
+
 
         public async Task<IReadOnlyList<User>> GetAllAsync()
         {

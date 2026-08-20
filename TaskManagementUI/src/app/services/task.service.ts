@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { TaskDetails } from "../models/task-details";
 import { CreateTask } from "../models/create-task";
+import { User } from "../models/user";
 @Injectable({
   providedIn: "root",
 })
@@ -20,6 +21,14 @@ export class TaskService {
 }
 createTask(task: CreateTask): Observable<number> {
   return this.http.post<number>(this.apiUrl, task);
+}
+
+deleteTask(id: number): Observable<void> {
+  return this.http.delete<void>(`${this.apiUrl}/${id}`);
+}
+
+updateTask(id: number, task: CreateTask): Observable<void> {
+  return this.http.put<void>(`${this.apiUrl}/${id}`, task);
 }
   }
   
