@@ -26,7 +26,8 @@ namespace TaskManagement.Controllers
         public async Task<IActionResult> GetUserById(int id)
         {
             var user = await userService.GetByIdAsync(id);
-            return Ok(id);
+            if (user == null) return NotFound();
+            return Ok(user);
         }
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserDto createUserDto)

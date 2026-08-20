@@ -37,32 +37,34 @@
       <h2>Tasks</h2>
       <span>Manage and organize your work</span>
     </div>
-<section class="task-statistics">
 
-  <div class="stat-total">
-    <span class="stat-label">Total Tasks</span>
-    <span class="stat-number">{{ totalTasks }}</span>
-  </div>
+    <section class="task-statistics">
 
-  <div class="priority-stat">
-    <span class="priority-dot low"></span>
-    <span>Low</span>
-    <strong>{{ lowPriorityTasks }}</strong>
-  </div>
+      <div class="stat-total">
+        <span class="stat-label">Total Tasks</span>
+        <span class="stat-number">{{ totalTasks }}</span>
+      </div>
 
-  <div class="priority-stat">
-    <span class="priority-dot medium"></span>
-    <span>Medium</span>
-    <strong>{{ mediumPriorityTasks }}</strong>
-  </div>
+      <div class="priority-stat">
+        <span class="priority-dot low"></span>
+        <span>Low</span>
+        <strong>{{ lowPriorityTasks }}</strong>
+      </div>
 
-  <div class="priority-stat">
-    <span class="priority-dot high"></span>
-    <span>High</span>
-    <strong>{{ highPriorityTasks }}</strong>
-  </div>
+      <div class="priority-stat">
+        <span class="priority-dot medium"></span>
+        <span>Medium</span>
+        <strong>{{ mediumPriorityTasks }}</strong>
+      </div>
 
-</section>
+      <div class="priority-stat">
+        <span class="priority-dot high"></span>
+        <span>High</span>
+        <strong>{{ highPriorityTasks }}</strong>
+      </div>
+
+    </section>
+
     <div class="tasks-actions">
 
       <button class="filter-btn" type="button" (click)="showFilters = !showFilters" [attr.aria-expanded]="showFilters">
@@ -118,202 +120,227 @@
 
 
   <section class="task-board">
+
+    <!-- TO DO COLUMN -->
     <div class="task-column" [class.drop-target]="dragOverStatus === 1" (dragover)="onDragOver(1, $event)" (drop)="onDrop(1, $event)">
       <div class="column-header">
         <div>
           <h3>To Do</h3>
           <span>Tasks that haven't started</span>
         </div>
-        <span class="task-count">{{ filteredTasks.filter(t => t.status === 1).length }}</span>
+        <span class="task-count">{{ getColumnTasks(1).length }}</span>
       </div>
+
       <div class="task-list">
-        <ng-container *ngFor="let task of paginatedTasks">
-          <div
-            class="task-item"
-            [class.dragging]="draggedTask?.taskId === task.taskId"
-            draggable="true"
-            (dragstart)="onDragStart(task)"
-            (dragend)="onDragEnd()"
-            *ngIf="task.status === 1">
-            <div class="task-info">
-              <h4>{{ task.title }}</h4>
-              <div class="task-meta">
-                <span><i class="bi bi-person"></i>{{ task.fullName }}</span>
-                <span *ngIf="task.dueDate">
-                  <i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}
+        <div
+          class="task-item"
+          *ngFor="let task of getPaginatedColumnTasks(1)"
+          [class.dragging]="draggedTask?.taskId === task.taskId"
+          draggable="true"
+          (dragstart)="onDragStart(task)"
+          (dragend)="onDragEnd()">
+          <div class="task-info">
+            <h4>{{ task.title }}</h4>
+            <div class="task-meta">
+              <span><i class="bi bi-person"></i>{{ task.fullName }}</span>
+              <span *ngIf="task.dueDate">
+                <i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}
+              </span>
+              <span
+                *ngIf="task.dueDate && isOverdue(task.dueDate)"
+                class="overdue">
+                ⚠ Overdue
+              </span>
+
+              <span class="priority">
+                <span
+                  class="priority-dot"
+                  [class.low]="task.priority === 1"
+                  [class.medium]="task.priority === 2"
+                  [class.high]="task.priority === 3">
                 </span>
-           <span
-  *ngIf="task.dueDate && isOverdue(task.dueDate)"
-  class="overdue">
-  ⚠ Overdue
-</span>
 
-                  <span class="priority">
-    <span
-      class="priority-dot"
-      [class.low]="task.priority === 1"
-      [class.medium]="task.priority === 2"
-      [class.high]="task.priority === 3">
-    </span>
-
-    {{ task.priority === 1 ? 'Low' : task.priority === 2 ? 'Medium' : 'High' }}
-  </span>
-              </div>
-            </div>
-            <div class="task-actions">
-<button
-  title="View Details"
-  (click)="viewTask(task.taskId)">
-  <i class="bi bi-eye"></i>
-</button>
-             <button title="Edit" (click)="openEditTask(task)"><i class="bi bi-pencil"></i></button>
-              <button
-                title="Delete"
-                class="delete-btn"
-                (click)="requestDeleteTask(task)">
-                <i class="bi bi-trash3"></i>
-              </button>
+                {{ task.priority === 1 ? 'Low' : task.priority === 2 ? 'Medium' : 'High' }}
+              </span>
             </div>
           </div>
-        </ng-container>
-        <p class="empty-state" *ngIf="paginatedTasks.filter(t => t.status === 1).length === 0">
+          <div class="task-actions">
+            <button
+              title="View Details"
+              (click)="viewTask(task.taskId)">
+              <i class="bi bi-eye"></i>
+            </button>
+            <button title="Edit" (click)="openEditTask(task)"><i class="bi bi-pencil"></i></button>
+            <button
+              title="Delete"
+              class="delete-btn"
+              (click)="requestDeleteTask(task)">
+              <i class="bi bi-trash3"></i>
+            </button>
+          </div>
+        </div>
+
+        <p class="empty-state" *ngIf="getColumnTasks(1).length === 0">
           {{ searchTerm || statusFilter !== 0 || priorityFilter !== 0 ? 'No tasks found' : 'No tasks to do' }}
         </p>
       </div>
+
+      <nav class="pagination column-pagination" *ngIf="getTotalPagesForStatus(1) > 1" aria-label="To Do pages">
+        <button type="button" (click)="previousPageForStatus(1)" [disabled]="getPageForStatus(1) === 1" aria-label="Previous page">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <span>Page {{ getPageForStatus(1) }} of {{ getTotalPagesForStatus(1) }}</span>
+        <button type="button" (click)="nextPageForStatus(1)" [disabled]="getPageForStatus(1) === getTotalPagesForStatus(1)" aria-label="Next page">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </nav>
     </div>
 
+    <!-- IN PROGRESS COLUMN -->
     <div class="task-column" [class.drop-target]="dragOverStatus === 2" (dragover)="onDragOver(2, $event)" (drop)="onDrop(2, $event)">
       <div class="column-header">
         <div>
           <h3>In Progress</h3>
           <span>Tasks currently being worked on</span>
         </div>
-        <span class="task-count">{{ filteredTasks.filter(t => t.status === 2).length }}</span>
+        <span class="task-count">{{ getColumnTasks(2).length }}</span>
       </div>
-      <div class="task-list">
-        <ng-container *ngFor="let task of paginatedTasks">
-          <div
-            class="task-item"
-            [class.dragging]="draggedTask?.taskId === task.taskId"
-            draggable="true"
-            (dragstart)="onDragStart(task)"
-            (dragend)="onDragEnd()"
-            *ngIf="task.status === 2">
-            <div class="task-info">
-              <h4>{{ task.title }}</h4>
-              <div class="task-meta">
-                <span><i class="bi bi-person"></i>{{ task.fullName }}</span>
-                <span *ngIf="task.dueDate">
-                  <i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}
-                </span>
-<span
-  *ngIf="task.dueDate && isOverdue(task.dueDate)"
-  class="overdue">
-  ⚠ Overdue
-</span>
-                  <span class="priority">
-    <span
-      class="priority-dot"
-      [class.low]="task.priority === 1"
-      [class.medium]="task.priority === 2"
-      [class.high]="task.priority === 3">
-    </span>
 
-    {{ task.priority === 1 ? 'Low' : task.priority === 2 ? 'Medium' : 'High' }}
-  </span>
-              </div>
-            </div>
-            <div class="task-actions">
-            <button
-  title="View Details"
-  (click)="viewTask(task.taskId)">
-  <i class="bi bi-eye"></i>
-</button>
-    <button title="Edit" (click)="openEditTask(task)"><i class="bi bi-pencil"></i></button>
-              <button
-                title="Delete"
-                class="delete-btn"
-                (click)="requestDeleteTask(task)">
-                <i class="bi bi-trash3"></i>
-              </button>
+      <div class="task-list">
+        <div
+          class="task-item"
+          *ngFor="let task of getPaginatedColumnTasks(2)"
+          [class.dragging]="draggedTask?.taskId === task.taskId"
+          draggable="true"
+          (dragstart)="onDragStart(task)"
+          (dragend)="onDragEnd()">
+          <div class="task-info">
+            <h4>{{ task.title }}</h4>
+            <div class="task-meta">
+              <span><i class="bi bi-person"></i>{{ task.fullName }}</span>
+              <span *ngIf="task.dueDate">
+                <i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}
+              </span>
+              <span
+                *ngIf="task.dueDate && isOverdue(task.dueDate)"
+                class="overdue">
+                ⚠ Overdue
+              </span>
+              <span class="priority">
+                <span
+                  class="priority-dot"
+                  [class.low]="task.priority === 1"
+                  [class.medium]="task.priority === 2"
+                  [class.high]="task.priority === 3">
+                </span>
+
+                {{ task.priority === 1 ? 'Low' : task.priority === 2 ? 'Medium' : 'High' }}
+              </span>
             </div>
           </div>
-        </ng-container>
-        <p class="empty-state" *ngIf="paginatedTasks.filter(t => t.status === 2).length === 0">
+          <div class="task-actions">
+            <button
+              title="View Details"
+              (click)="viewTask(task.taskId)">
+              <i class="bi bi-eye"></i>
+            </button>
+            <button title="Edit" (click)="openEditTask(task)"><i class="bi bi-pencil"></i></button>
+            <button
+              title="Delete"
+              class="delete-btn"
+              (click)="requestDeleteTask(task)">
+              <i class="bi bi-trash3"></i>
+            </button>
+          </div>
+        </div>
+
+        <p class="empty-state" *ngIf="getColumnTasks(2).length === 0">
           {{ searchTerm || statusFilter !== 0 || priorityFilter !== 0 ? 'No tasks found' : 'No tasks in progress' }}
         </p>
       </div>
+
+      <nav class="pagination column-pagination" *ngIf="getTotalPagesForStatus(2) > 1" aria-label="In Progress pages">
+        <button type="button" (click)="previousPageForStatus(2)" [disabled]="getPageForStatus(2) === 1" aria-label="Previous page">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <span>Page {{ getPageForStatus(2) }} of {{ getTotalPagesForStatus(2) }}</span>
+        <button type="button" (click)="nextPageForStatus(2)" [disabled]="getPageForStatus(2) === getTotalPagesForStatus(2)" aria-label="Next page">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </nav>
     </div>
 
+    <!-- COMPLETED COLUMN -->
     <div class="task-column" [class.drop-target]="dragOverStatus === 3" (dragover)="onDragOver(3, $event)" (drop)="onDrop(3, $event)">
       <div class="column-header">
         <div>
           <h3>Completed</h3>
           <span>Finished tasks</span>
         </div>
-        <span class="task-count">{{ filteredTasks.filter(t => t.status === 3).length }}</span>
+        <span class="task-count">{{ getColumnTasks(3).length }}</span>
       </div>
+
       <div class="task-list">
-        <ng-container *ngFor="let task of paginatedTasks">
-          <div
-            class="task-item"
-            [class.dragging]="draggedTask?.taskId === task.taskId"
-            draggable="true"
-            (dragstart)="onDragStart(task)"
-            (dragend)="onDragEnd()"
-            *ngIf="task.status === 3">
-            <div class="task-info">
-              <h4>{{ task.title }}</h4>
-              <div class="task-meta">
-                <span><i class="bi bi-person"></i>{{ task.fullName }}</span>
-                <span *ngIf="task.dueDate">
-                  <i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}
+        <div
+          class="task-item"
+          *ngFor="let task of getPaginatedColumnTasks(3)"
+          [class.dragging]="draggedTask?.taskId === task.taskId"
+          draggable="true"
+          (dragstart)="onDragStart(task)"
+          (dragend)="onDragEnd()">
+          <div class="task-info">
+            <h4>{{ task.title }}</h4>
+            <div class="task-meta">
+              <span><i class="bi bi-person"></i>{{ task.fullName }}</span>
+              <span *ngIf="task.dueDate">
+                <i class="bi bi-calendar3"></i>{{ task.dueDate | date:'MMM d' }}
+              </span>
+
+              <span class="priority">
+                <span
+                  class="priority-dot"
+                  [class.low]="task.priority === 1"
+                  [class.medium]="task.priority === 2"
+                  [class.high]="task.priority === 3">
                 </span>
 
-   <span class="priority">
-    <span
-      class="priority-dot"
-      [class.low]="task.priority === 1"
-      [class.medium]="task.priority === 2"
-      [class.high]="task.priority === 3">
-    </span>
-
-    {{ task.priority === 1 ? 'Low' : task.priority === 2 ? 'Medium' : 'High' }}
-  </span>
-              </div>
-            </div>
-            <div class="task-actions">
-<button
-  title="View Details"
-  (click)="viewTask(task.taskId)">
-  <i class="bi bi-eye"></i>
-</button>
-              <button title="Edit" (click)="openEditTask(task)"><i class="bi bi-pencil"></i></button>
-              <button
-                title="Delete"
-                class="delete-btn"
-                (click)="requestDeleteTask(task)">
-                <i class="bi bi-trash3"></i>
-              </button>
+                {{ task.priority === 1 ? 'Low' : task.priority === 2 ? 'Medium' : 'High' }}
+              </span>
             </div>
           </div>
-        </ng-container>
-        <p class="empty-state" *ngIf="paginatedTasks.filter(t => t.status === 3).length === 0">
+          <div class="task-actions">
+            <button
+              title="View Details"
+              (click)="viewTask(task.taskId)">
+              <i class="bi bi-eye"></i>
+            </button>
+            <button title="Edit" (click)="openEditTask(task)"><i class="bi bi-pencil"></i></button>
+            <button
+              title="Delete"
+              class="delete-btn"
+              (click)="requestDeleteTask(task)">
+              <i class="bi bi-trash3"></i>
+            </button>
+          </div>
+        </div>
+
+        <p class="empty-state" *ngIf="getColumnTasks(3).length === 0">
           {{ searchTerm || statusFilter !== 0 || priorityFilter !== 0 ? 'No tasks found' : 'No completed tasks' }}
         </p>
       </div>
-    </div>
-  </section>
 
-  <nav class="pagination" *ngIf="totalPages > 1" aria-label="Task pages">
-    <button type="button" (click)="previousPage()" [disabled]="currentPage === 1" aria-label="Previous page">
-      <i class="bi bi-chevron-left"></i>
-    </button>
-    <span>Page {{ currentPage }} of {{ totalPages }}</span>
-    <button type="button" (click)="nextPage()" [disabled]="currentPage === totalPages" aria-label="Next page">
-      <i class="bi bi-chevron-right"></i>
-    </button>
-  </nav>
+      <nav class="pagination column-pagination" *ngIf="getTotalPagesForStatus(3) > 1" aria-label="Completed pages">
+        <button type="button" (click)="previousPageForStatus(3)" [disabled]="getPageForStatus(3) === 1" aria-label="Previous page">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <span>Page {{ getPageForStatus(3) }} of {{ getTotalPagesForStatus(3) }}</span>
+        <button type="button" (click)="nextPageForStatus(3)" [disabled]="getPageForStatus(3) === getTotalPagesForStatus(3)" aria-label="Next page">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </nav>
+    </div>
+
+  </section>
 
   <footer class="footer">
 
@@ -322,350 +349,248 @@
     </span>
 
   </footer>
-<div class="details-overlay" *ngIf="selectedTask">
 
-  <div class="details-popup">
+  <div class="details-overlay" *ngIf="selectedTask">
 
-    <div class="details-header">
-      <div>
-        <h2>Task Details</h2>
-        <span>View task information</span>
+    <div class="details-popup">
+
+      <div class="details-header">
+        <div>
+          <h2>Task Details</h2>
+          <span>View task information</span>
+        </div>
+
+        <button
+          class="close-details"
+          (click)="closeDetails()">
+          <i class="bi bi-x-lg"></i>
+        </button>
       </div>
 
-      <button
-        class="close-details"
-        (click)="closeDetails()">
-        <i class="bi bi-x-lg"></i>
-      </button>
+      <div class="details-content">
+
+        <div class="details-title">
+          {{ selectedTask.title }}
+        </div>
+
+        <div class="details-description">
+          <span class="details-label">Description</span>
+
+          <p>
+            {{ selectedTask.description || 'No description provided.' }}
+          </p>
+        </div>
+
+        <div class="details-info">
+
+          <div class="details-info-item">
+            <i class="bi bi-person"></i>
+
+            <div>
+              <span>Assigned To</span>
+              <strong>{{ selectedTask.fullName || 'Unassigned' }}</strong>
+            </div>
+          </div>
+
+          <div class="details-info-item">
+            <i class="bi bi-calendar3"></i>
+
+            <div>
+              <span>Due Date</span>
+              <strong>
+                {{ selectedTask.dueDate | date:'MMM d, yyyy' }}
+              </strong>
+            </div>
+          </div>
+
+          <div class="details-info-item">
+            <i class="bi bi-flag"></i>
+
+            <div>
+              <span>Priority</span>
+
+              <strong>
+                {{
+                  selectedTask.priority === 1
+                    ? 'Low'
+                    : selectedTask.priority === 2
+                    ? 'Medium'
+                    : 'High'
+                }}
+              </strong>
+            </div>
+          </div>
+
+          <div class="details-info-item">
+            <i class="bi bi-check-circle"></i>
+
+            <div>
+              <span>Status</span>
+
+              <strong>
+                {{
+                  selectedTask.status === 1
+                    ? 'To Do'
+                    : selectedTask.status === 2
+                    ? 'In Progress'
+                    : 'Completed'
+                }}
+              </strong>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="details-footer">
+        <button
+          class="close-btn"
+          (click)="closeDetails()">
+          Close
+        </button>
+      </div>
+
     </div>
 
-    <div class="details-content">
+  </div>
 
-      <div class="details-title">
-        {{ selectedTask.title }}
+  <div class="details-overlay" *ngIf="showAddTask">
+
+    <div class="details-popup">
+
+      <div class="details-header">
+        <div>
+          <h2>{{ isEditingTask ? 'Edit Task' : 'Add Task' }}</h2>
+          <span>{{ isEditingTask ? 'Update task information' : 'Create a new task' }}</span>
+        </div>
+
+        <button
+          class="close-details"
+          (click)="closeAddTask()">
+          <i class="bi bi-x-lg"></i>
+        </button>
       </div>
 
-      <div class="details-description">
-        <span class="details-label">Description</span>
+      <div class="details-content" [formGroup]="taskForm">
+
+        <div class="form-group">
+          <label>Title</label>
+          <input
+            type="text"
+            formControlName="title"
+            placeholder="Enter task title">
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea
+            formControlName="description"
+            placeholder="Enter description">
+          </textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Due Date</label>
+          <input
+            type="date"
+            formControlName="dueDate"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label>Status</label>
+          <select formControlName="status">
+            <option [ngValue]="0" disabled>Select status</option>
+            <option [ngValue]="1">To Do</option>
+            <option [ngValue]="2">In Progress</option>
+            <option [ngValue]="3">Completed</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Priority</label>
+          <select formControlName="priority">
+            <option [ngValue]="0" disabled>Select priority</option>
+            <option [ngValue]="1">Low</option>
+            <option [ngValue]="2">Medium</option>
+            <option [ngValue]="3">High</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Assigned To</label>
+
+          <select formControlName="userId">
+            <option [ngValue]="0" disabled>Select user</option>
+
+            <option
+              *ngFor="let user of users"
+              [value]="user.userId">
+              {{ user.fullName }}
+            </option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="details-footer">
+        <span class="form-error" *ngIf="addTaskError">{{ addTaskError }}</span>
+
+        <button
+          class="close-btn"
+          (click)="closeAddTask()">
+          Cancel
+        </button>
+
+        <button
+          class="add-task-btn"
+          (click)="addTask()">
+          {{ isEditingTask ? 'Update' : 'Save' }}
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="details-overlay" *ngIf="taskToDelete">
+    <div class="details-popup delete-popup" role="alertdialog" aria-modal="true">
+      <div class="details-header">
+        <div>
+          <h2>Delete Task</h2>
+          <span>Remove this task permanently</span>
+        </div>
+
+        <button
+          class="close-details"
+          aria-label="Cancel delete"
+          (click)="cancelDelete()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <div class="details-content delete-content">
+        <div class="delete-icon">
+          <i class="bi bi-trash3"></i>
+        </div>
 
         <p>
-          {{ selectedTask.description || 'No description provided.' }}
+          Are you sure you want to delete
+          <strong>{{ taskToDelete.title }}</strong>?
         </p>
       </div>
 
-      <div class="details-info">
-
-        <div class="details-info-item">
-          <i class="bi bi-person"></i>
-
-          <div>
-            <span>Assigned To</span>
-            <strong>{{ selectedTask.fullName || 'Unassigned' }}</strong>
-          </div>
-        </div>
-
-        <div class="details-info-item">
-          <i class="bi bi-calendar3"></i>
-
-          <div>
-            <span>Due Date</span>
-            <strong>
-              {{ selectedTask.dueDate | date:'MMM d, yyyy' }}
-            </strong>
-          </div>
-        </div>
-
-        <div class="details-info-item">
-          <i class="bi bi-flag"></i>
-
-          <div>
-            <span>Priority</span>
-
-            <strong>
-              {{
-                selectedTask.priority === 1
-                  ? 'Low'
-                  : selectedTask.priority === 2
-                  ? 'Medium'
-                  : 'High'
-              }}
-            </strong>
-          </div>
-        </div>
-
-        <div class="details-info-item">
-          <i class="bi bi-check-circle"></i>
-
-          <div>
-            <span>Status</span>
-
-            <strong>
-              {{
-                selectedTask.status === 1
-                  ? 'To Do'
-                  : selectedTask.status === 2
-                  ? 'In Progress'
-                  : 'Completed'
-              }}
-            </strong>
-          </div>
-        </div>
-
+      <div class="details-footer delete-actions">
+        <button
+          class="confirm-delete-btn"
+          (click)="deleteTask(taskToDelete.taskId)">
+          <i class="bi bi-trash3"></i>
+          Delete task
+        </button>
+        <button class="close-btn" (click)="cancelDelete()">Cancel</button>
       </div>
-
     </div>
-
-    <div class="details-footer">
-      <button
-        class="close-btn"
-        (click)="closeDetails()">
-        Close
-      </button>
-    </div>
-
   </div>
 
-</div>
-<div class="details-overlay" *ngIf="showAddTask">
-
-  <div class="details-popup">
-
-    <div class="details-header">
-      <div>
-        <h2>{{ isEditingTask ? 'Edit Task' : 'Add Task' }}</h2>
-        <span>{{ isEditingTask ? 'Update task information' : 'Create a new task' }}</span>
-      </div>
-
-      <button
-        class="close-details"
-        (click)="closeAddTask()">
-        <i class="bi bi-x-lg"></i>
-      </button>
-    </div>
-
-    <div class="details-content" [formGroup]="taskForm">
-
-      <div class="form-group">
-        <label>Title</label>
-        <input
-          type="text"
-          formControlName="title"
-          placeholder="Enter task title">
-      </div>
-
-      <div class="form-group">
-        <label>Description</label>
-        <textarea
-          formControlName="description"
-          placeholder="Enter description">
-        </textarea>
-      </div>
-
-      <div class="form-group">
-        <label>Due Date</label>
-        <input
-          type="date"
-          formControlName="dueDate"
-          required>
-      </div>
-
-      <div class="form-group">
-        <label>Status</label>
-        <select formControlName="status">
-          <option [ngValue]="0" disabled>Select status</option>
-          <option [ngValue]="1">To Do</option>
-          <option [ngValue]="2">In Progress</option>
-          <option [ngValue]="3">Completed</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Priority</label>
-        <select formControlName="priority">
-          <option [ngValue]="0" disabled>Select priority</option>
-          <option [ngValue]="1">Low</option>
-          <option [ngValue]="2">Medium</option>
-          <option [ngValue]="3">High</option>
-        </select>
-      </div>
-
- <div class="form-group">
-  <label>Assigned To</label>
-
-  <select formControlName="userId">
-    <option [ngValue]="0" disabled>Select user</option>
-
-    <option
-      *ngFor="let user of users"
-      [value]="user.userId">
-      {{ user.fullName }}
-    </option>
-  </select>
-</div>
-
-    </div>
-
-    <div class="details-footer">
-      <span class="form-error" *ngIf="addTaskError">{{ addTaskError }}</span>
-
-      <button
-        class="close-btn"
-        (click)="closeAddTask()">
-        Cancel
-      </button>
-
-<button
-  class="add-task-btn"
-  (click)="addTask()">
-  {{ isEditingTask ? 'Update' : 'Save' }}
-</button>
-  </div>
-
-</div>
-
-</div>
-
-<div class="details-overlay user-overlay" *ngIf="showUserForm">
-  <div class="details-popup">
-    <div class="details-header">
-      <div>
-        <h2>{{ isEditingUser ? 'Edit User' : 'Add User' }}</h2>
-        <span>{{ isEditingUser ? 'Update user information' : 'Create a new user' }}</span>
-      </div>
-      <button type="button" class="close-details" (click)="closeUserForm()">
-        <i class="bi bi-x-lg"></i>
-      </button>
-    </div>
-
-    <div class="details-content" [formGroup]="userForm">
-      <div class="form-group">
-        <label>Full Name</label>
-        <input
-          type="text"
-          formControlName="fullName"
-          placeholder="Enter full name">
-      </div>
-
-      <div class="form-group">
-        <label>Email</label>
-        <input
-          type="email"
-          formControlName="email"
-          placeholder="Enter email address">
-      </div>
-    </div>
-
-    <div class="details-footer">
-      <span class="form-error" *ngIf="userError">{{ userError }}</span>
-      <button type="button" class="close-btn" (click)="closeUserForm()">Cancel</button>
-      <button type="button" class="add-task-btn" (click)="saveUser()">
-        {{ isEditingUser ? 'Update' : 'Save' }}
-      </button>
-    </div>
-  </div>
-</div>
-
-<div class="details-overlay user-overlay" *ngIf="selectedUser">
-  <div class="details-popup">
-    <div class="details-header">
-      <div>
-        <h2>User Details</h2>
-        <span>View user information</span>
-      </div>
-      <button type="button" class="close-details" (click)="closeUserDetails()">
-        <i class="bi bi-x-lg"></i>
-      </button>
-    </div>
-
-    <div class="details-content">
-      <div class="details-title">{{ selectedUser.fullName }}</div>
-      <div class="details-info">
-        <div class="details-info-item">
-          <i class="bi bi-envelope"></i>
-          <div>
-            <span>Email</span>
-            <strong>{{ selectedUser.email }}</strong>
-          </div>
-        </div>
-        <div class="details-info-item">
-          <i class="bi bi-person-badge"></i>
-          <div>
-            <span>User ID</span>
-            <strong>{{ selectedUser.userId }}</strong>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="details-footer">
-      <button type="button" class="close-btn" (click)="closeUserDetails()">Close</button>
-    </div>
-  </div>
-</div>
-
-<div class="details-overlay user-overlay" *ngIf="userToDelete">
-  <div class="details-popup delete-popup" role="alertdialog" aria-modal="true">
-    <div class="details-header">
-      <div>
-        <h2>{{ userDeleteError ? 'User cannot be deleted' : 'Delete User' }}</h2>
-        <span>{{ userDeleteError ? 'Resolve the assigned tasks first' : 'Remove this user permanently' }}</span>
-      </div>
-      <button type="button" class="close-details" (click)="cancelDeleteUser()">
-        <i class="bi bi-x-lg"></i>
-      </button>
-    </div>
-
-    <div class="details-content delete-content">
-      <div class="delete-icon"><i class="bi bi-trash3"></i></div>
-      <p *ngIf="!userDeleteError">Are you sure you want to delete <strong>{{ userToDelete.fullName }}</strong>?</p>
-      <p class="form-error" *ngIf="userDeleteError">{{ userDeleteError }}</p>
-    </div>
-
-    <div class="details-footer delete-actions">
-      <button type="button" class="confirm-delete-btn" *ngIf="!userDeleteError" (click)="deleteUser(userToDelete.userId)">
-        <i class="bi bi-trash3"></i>
-        Delete user
-      </button>
-      <button type="button" class="close-btn" (click)="cancelDeleteUser()">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<div class="details-overlay" *ngIf="taskToDelete">
-  <div class="details-popup delete-popup" role="alertdialog" aria-modal="true">
-    <div class="details-header">
-      <div>
-        <h2>Delete Task</h2>
-        <span>Remove this task permanently</span>
-      </div>
-
-      <button
-        class="close-details"
-        aria-label="Cancel delete"
-        (click)="cancelDelete()">
-        <i class="bi bi-x-lg"></i>
-      </button>
-    </div>
-
-    <div class="details-content delete-content">
-      <div class="delete-icon">
-        <i class="bi bi-trash3"></i>
-      </div>
-
-      <p>
-        Are you sure you want to delete
-        <strong>{{ taskToDelete.title }}</strong>?
-      </p>
-    </div>
-
-    <div class="details-footer delete-actions">
-      <button
-        class="confirm-delete-btn"
-        (click)="deleteTask(taskToDelete.taskId)">
-        <i class="bi bi-trash3"></i>
-        Delete task
-      </button>
-      <button class="close-btn" (click)="cancelDelete()">Cancel</button>
-    </div>
-  </div>
 </div>

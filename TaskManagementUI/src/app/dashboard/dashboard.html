@@ -1,0 +1,61 @@
+<div class="page dashboard-page" [class.dark-mode]="isDarkMode">
+  <nav class="navbar navbar-expand-lg">
+    <div class="navbar-left">
+      <img src="/Images/fda68c77a45ec5b8bbcc69d2812febb8-removebg-preview.png" alt="Lock In Logo">
+      <span class="navbar-brand">LOCK IN</span>
+      <div class="page-links"><a class="active" routerLink="/dashboard">Dashboard</a><a routerLink="/tasks">Tasks</a><a routerLink="/users">Users</a></div>
+    </div>
+    <button type="button" class="theme-btn" (click)="toggleTheme()" title="Toggle theme"><i class="bi" [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill'"></i></button>
+  </nav>
+
+  <header class="dashboard-header">
+    <div><h1>Dashboard</h1><p>Overview of your task workload</p></div>
+  </header>
+
+  <section class="dashboard-content">
+    <p class="dashboard-message error" *ngIf="error">{{ error }}</p>
+    <div class="dashboard-stats">
+      <article class="stat-total"><span>Total Tasks</span><strong>{{ tasks.length }}</strong></article>
+      <article><span>To Do</span><strong>{{ count(1) }}</strong></article>
+      <article><span>In Progress</span><strong>{{ count(2) }}</strong></article>
+      <article><span>Completed</span><strong>{{ count(3) }}</strong></article>
+    </div>
+
+    <section class="dashboard-chart-grid">
+      <div class="chart-card">
+        <div><h2>Priority Overview</h2><p>Tasks grouped by priority</p></div>
+        <div class="priority-bars">
+          <div><span>Low</span><div class="bar-track"><i class="bar low" [style.width]="priorityWidth(1)"></i></div><strong>{{ priorityCount(1) }}</strong></div>
+          <div><span>Medium</span><div class="bar-track"><i class="bar medium" [style.width]="priorityWidth(2)"></i></div><strong>{{ priorityCount(2) }}</strong></div>
+          <div><span>High</span><div class="bar-track"><i class="bar high" [style.width]="priorityWidth(3)"></i></div><strong>{{ priorityCount(3) }}</strong></div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div><h2>Workflow Mix</h2><p>Tasks across workflow stages</p></div>
+      <div class="status-chart" aria-label="Task status chart">
+        <div class="status-donut" [style.background]="statusChartStyle"><span>{{ tasks.length }}</span></div>
+        <div class="status-chart-legend">
+          <strong>Status</strong>
+          <span><i class="legend-dot todo"></i>To Do {{ count(1) }}</span>
+          <span><i class="legend-dot progress"></i>In Progress {{ count(2) }}</span>
+          <span><i class="legend-dot completed"></i>Completed {{ count(3) }}</span>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <section class="recent-tasks" *ngIf="!error">
+      <div class="section-heading"><div><h2>Recent Tasks</h2><p>Latest work from your task board</p></div><a routerLink="/tasks">View all</a></div>
+      <div class="recent-task-row" *ngFor="let task of recentTasks">
+        <span class="recent-task-title">{{ task.title }}</span>
+        <span class="recent-task-user">{{ task.fullName || 'Unassigned' }}</span>
+        <span class="recent-task-status" [class.todo-status]="task.status === 1" [class.progress-status]="task.status === 2" [class.completed-status]="task.status === 3">
+          {{ task.status === 1 ? 'To Do' : task.status === 2 ? 'In Progress' : 'Completed' }}
+        </span>
+      </div>
+      <p class="dashboard-message" *ngIf="recentTasks.length === 0">No tasks found.</p>
+    </section>
+  </section>
+
+  <footer class="footer"><span>&copy; 2026 LOCK IN. All rights reserved.</span></footer>
+</div>

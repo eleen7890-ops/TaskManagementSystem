@@ -1,0 +1,99 @@
+<div class="page users-page" [class.dark-mode]="isDarkMode">
+  <nav class="navbar navbar-expand-lg">
+    <div class="navbar-left">
+      <img src="/Images/fda68c77a45ec5b8bbcc69d2812febb8-removebg-preview.png" alt="Lock In Logo">
+      <span class="navbar-brand">LOCK IN</span>
+      <div class="page-links"><a routerLink="/dashboard">Dashboard</a><a routerLink="/tasks">Tasks</a><a class="active" routerLink="/users">Users</a></div>
+    </div>
+    <button type="button" class="theme-btn" (click)="toggleTheme()" title="Toggle theme"><i class="bi" [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill'"></i></button>
+  </nav>
+
+  <header class="users-header">
+    <div><h1>Users</h1><p>Manage users and their information</p></div>
+    <button type="button" class="add-user-btn" (click)="openAdd()"><i class="bi bi-plus-lg"></i> Add User</button>
+  </header>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+  <div class="users-table-wrapper">
+    <table class="users-table">
+      <thead><tr><th>User</th><th>Email</th><th class="actions-column">Actions</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let user of paginatedUsers">
+          <td><div class="user-info"><div class="user-avatar">{{ user.fullName.charAt(0).toUpperCase() }}</div><span>{{ user.fullName }}</span></div></td>
+          <td>{{ user.email }}</td>
+          <td>
+            <div class="user-actions">
+              <button type="button" title="View Details" (click)="viewUser(user)"><i class="bi bi-eye"></i></button>
+              <button type="button" title="Edit" (click)="openEdit(user)"><i class="bi bi-pencil"></i></button>
+              <button type="button" title="Delete" class="delete-btn" (click)="delete(user)"><i class="bi bi-trash3"></i></button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="users.length === 0"><td class="empty-table-state" colspan="3">No users found</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <nav class="pagination" *ngIf="totalPages > 1" aria-label="User pages">
+    <button type="button" (click)="previousPage()" [disabled]="currentPage === 1" aria-label="Previous page">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button type="button" (click)="nextPage()" [disabled]="currentPage === totalPages" aria-label="Next page">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </nav>
+
+  <footer class="footer"><span>&copy; 2026 LOCK IN. All rights reserved.</span></footer>
+
+  <div class="modal-backdrop" *ngIf="selectedUser">
+    <div class="user-details">
+      <button type="button" class="close" title="Close" (click)="closeUserDetails()"><i class="bi bi-x-lg"></i></button>
+      <h2>User Details</h2>
+      <p class="user-details-subtitle">View user information</p>
+
+      <div class="details-title">{{ selectedUser.fullName }}</div>
+
+      <div class="details-info">
+        <div class="details-info-item">
+          <i class="bi bi-envelope"></i>
+          <div>
+            <span>Email</span>
+            <strong>{{ selectedUser.email }}</strong>
+          </div>
+        </div>
+        <div class="details-info-item">
+          <i class="bi bi-person-badge"></i>
+          <div>
+            <span>User ID</span>
+            <strong>{{ selectedUser.userId }}</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions"><button type="button" class="close-btn" (click)="closeUserDetails()">Close</button></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" *ngIf="userToDelete">
+    <div class="delete-confirmation">
+      <button type="button" class="close" title="Close" (click)="cancelDelete()"><i class="bi bi-x-lg"></i></button>
+      <div class="delete-icon"><i class="bi bi-trash3"></i></div>
+      <h2>Delete User</h2>
+      <p>Are you sure you want to delete <strong>{{ userToDelete.fullName }}</strong>?</p>
+      <p class="error" *ngIf="error">{{ error }}</p>
+      <div class="form-actions"><button type="button" class="close-btn" (click)="cancelDelete()">Cancel</button><button type="button" class="confirm-delete-btn" (click)="confirmDelete()"><i class="bi bi-trash3"></i> Delete user</button></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" *ngIf="showForm">
+    <form class="user-form" [formGroup]="userForm" (ngSubmit)="save()">
+      <button type="button" class="close" title="Close" (click)="closeForm()"><i class="bi bi-x-lg"></i></button>
+      <h2>{{ editingUserId === null ? 'Add User' : 'Edit User' }}</h2>
+      <label>Full Name<input formControlName="fullName" placeholder="Enter full name"></label>
+      <label>Email<input type="email" formControlName="email" placeholder="Enter email"></label>
+      <p class="error" *ngIf="userForm.invalid && userForm.touched">Enter a valid name and email.</p>
+      <div class="form-actions"><button type="button" class="close-btn" (click)="closeForm()">Cancel</button><button class="add-user-btn" type="submit">Save</button></div>
+    </form>
+  </div>
+</div>
