@@ -19,6 +19,16 @@ export class Tasks implements OnInit {
   tasks: Task[] = [];
   users: User[] = [];
    showAddTask = false;
+  isEditingTask = false;
+  editingTaskId: number | null = null;
+  taskToDelete: Task | null = null;
+  showUserForm = false;
+  isEditingUser = false;
+  editingUserId: number | null = null;
+  selectedUser: User | null = null;
+  userToDelete: User | null = null;
+  userForm = { fullName: '', email: '' };
+  userError = '';
 
   newTask: CreateTask = {
     title: '',
@@ -31,14 +41,186 @@ export class Tasks implements OnInit {
   addTaskError = '';
 
 openAddTask(): void {
+  this.showUserForm = false;
+  this.selectedUser = null;
+  this.userToDelete = null;
   this.addTaskError = '';
+  this.isEditingTask = false;
+  this.editingTaskId = null;
+  this.resetTaskForm();
   this.showAddTask = true;
 }
 closeAddTask(): void {
   this.showAddTask = false;
+  this.isEditingTask = false;
+  this.editingTaskId = null;
+  this.resetTaskForm();
+  this.addTaskError = '';
 }
+resetTaskForm(): void {
+  this.newTask = {
+    title: '',
+    description: '',
+    dueDate: '',
+    status: 0,
+    priority: 0,
+    userId: 0
+  };
+}
+openEditTask(task: Task): void {
+  this.addTaskError = '';
+  this.isEditingTask = true;
+  this.editingTaskId = task.taskId;
+  const user = this.users.find(item => item.fullName === task.fullName);
+
+  this.newTask = {
+    title: task.title,
+    description: '',
+    dueDate: task.dueDate ? task.dueDate.substring(0, 10) : '',
+    status: task.status,
+    priority: task.priority,
+    userId: user?.userId ?? 0
+  };
+
+  this.taskService.getTaskById(task.taskId).subscribe({
+    next: (details) => {
+      this.newTask.description = details.description || '';
+      this.showAddTask = true;
+      this.changeDetector.detectChanges();
+    },
+    error: () => {
+      this.addTaskError = 'Unable to load the task for editing.';
+    }
+  });
+}
+
+openAddUser(): void {
+  this.showAddTask = false;
+  this.selectedTask = null;
+  this.taskToDelete = null;
+  this.selectedUser = null;
+  this.userToDelete = null;
+  this.userForm = { fullName: '', email: '' };
+  this.userError = '';
+  this.isEditingUser = false;
+  this.editingUserId = null;
+  this.showUserForm = true;
+  this.changeDetector.detectChanges();
+}
+
+openEditUser(user: User): void {
+  this.showAddTask = false;
+  this.selectedTask = null;
+  this.taskToDelete = null;
+  this.selectedUser = null;
+  this.userToDelete = null;
+  this.userForm = { fullName: user.fullName, email: user.email };
+  this.userError = '';
+  this.isEditingUser = true;
+  this.editingUserId = user.userId;
+  this.showUserForm = true;
+  this.changeDetector.detectChanges();
+}
+
+closeUserForm(): void {
+  this.showUserForm = false;
+  this.isEditingUser = false;
+  this.editingUserId = null;
+  this.userForm = { fullName: '', email: '' };
+  this.userError = '';
+}
+
+saveUser(): void {
+  const user = {
+    fullName: this.userForm.fullName.trim(),
+    email: this.userForm.email.trim()
+  };
+
+  if (!user.fullName) {
+    this.userError = 'Full Name Is Required';
+    return;
+  }
+
+  if (!user.email) {
+    this.userError = 'Email Is Required';
+    return;
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email)) {
+    this.userError = 'Invalid Email Address';
+    return;
+  }
+
+  const handleError = (error: any): void => {
+    const validationErrors = error.error?.errors;
+    this.userError = validationErrors
+      ? Object.values(validationErrors).flat().join(' ')
+      : error.error?.message || 'The user could not be saved.';
+  };
+
+  if (this.isEditingUser && this.editingUserId !== null) {
+    this.userService.updateUser(this.editingUserId, user).subscribe({
+      next: () => {
+        this.closeUserForm();
+        this.loadUsers();
+      },
+      error: handleError
+    });
+    return;
+  }
+
+  this.userService.createUser(user).subscribe({
+    next: () => {
+      this.closeUserForm();
+      this.loadUsers();
+    },
+    error: handleError
+  });
+}
+
+viewUser(user: User): void {
+  this.showAddTask = false;
+  this.showUserForm = false;
+  this.selectedTask = null;
+  this.taskToDelete = null;
+  this.userToDelete = null;
+  this.selectedUser = user;
+  this.changeDetector.detectChanges();
+}
+
+closeUserDetails(): void {
+  this.selectedUser = null;
+}
+
+requestDeleteUser(user: User): void {
+  this.showAddTask = false;
+  this.showUserForm = false;
+  this.selectedTask = null;
+  this.taskToDelete = null;
+  this.selectedUser = null;
+  this.userToDelete = user;
+  this.changeDetector.detectChanges();
+}
+
+cancelDeleteUser(): void {
+  this.userToDelete = null;
+}
+
+deleteUser(userId: number): void {
+  this.userService.deleteUser(userId).subscribe({
+    next: () => {
+      this.users = this.users.filter(user => user.userId !== userId);
+      this.userToDelete = null;
+    },
+    error: (error) => {
+      console.error('Failed to delete user:', error);
+    }
+  });
+}
+
 addTask(): void {
   const title = this.newTask.title.trim();
+  const description = this.newTask.description.trim();
   const status = Number(this.newTask.status);
   const priority = Number(this.newTask.priority);
   const userId = Number(this.newTask.userId);
@@ -69,13 +251,51 @@ addTask(): void {
   }
 
   this.addTaskError = '';
-  this.taskService.createTask({
-    ...this.newTask,
+  const taskPayload = {
     title,
+    description,
+    dueDate: this.newTask.dueDate,
     status,
     priority,
     userId
-  }).subscribe({
+  };
+
+  if (this.isEditingTask && this.editingTaskId !== null) {
+    const updatedTaskId = this.editingTaskId;
+    this.taskService.updateTask(updatedTaskId, taskPayload).subscribe({
+      next: () => {
+        this.closeAddTask();
+        this.loadTasks();
+        if (this.selectedTask?.taskId === updatedTaskId) {
+          this.selectedTask = {
+            ...this.selectedTask,
+            title: taskPayload.title,
+            description: taskPayload.description,
+            dueDate: taskPayload.dueDate,
+            status: taskPayload.status,
+            priority: taskPayload.priority
+          };
+          this.changeDetector.detectChanges();
+        }
+        this.taskService.getTaskById(updatedTaskId).subscribe({
+          next: (details) => {
+            this.selectedTask = details;
+            this.changeDetector.detectChanges();
+          }
+        });
+      },
+      error: (error) => {
+        const validationErrors = error.error?.errors;
+        const validationMessage = validationErrors
+          ? Object.values(validationErrors).flat().join(' ')
+          : '';
+        this.addTaskError = validationMessage || error.error?.message || 'The task could not be updated.';
+      }
+    });
+    return;
+  }
+
+  this.taskService.createTask(taskPayload).subscribe({
     next: () => {
       console.log('Task created successfully');
       this.closeAddTask();
@@ -105,6 +325,7 @@ addTask(): void {
   this.taskService.getTaskById(id).subscribe({
     next: (task) => {
       this.selectedTask = task;
+      this.changeDetector.detectChanges();
       console.log('Selected task:', task);
     },
     
@@ -113,6 +334,25 @@ addTask(): void {
     }
   });
 }
+requestDeleteTask(task: Task): void {
+    this.taskToDelete = task;
+  }
+
+cancelDelete(): void {
+    this.taskToDelete = null;
+  }
+
+deleteTask(taskId: number): void {
+    this.taskService.deleteTask(taskId).subscribe({
+      next: () => {
+        this.tasks = this.tasks.filter(t => t.taskId !== taskId);
+        this.taskToDelete = null;
+      },
+      error: (err) => {
+        console.error("Failed to delete task", err);
+      },
+      });
+    }
 
   closeDetails(): void {
     this.selectedTask = null;
@@ -159,9 +399,10 @@ get highPriorityTasks(): number {
     });
   }
   loadUsers(): void {
-  this.userService.getUsers().subscribe({
+  this.userService.getAllUsers().subscribe({
     next: (data) => {
       this.users = data;
+      this.changeDetector.detectChanges();
       console.log('Users:', this.users);
     },
     error: (error) => {

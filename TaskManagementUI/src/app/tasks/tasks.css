@@ -729,6 +729,11 @@
   z-index: 1050;
 }
 
+.user-overlay {
+  z-index: 2000;
+  pointer-events: auto;
+}
+
 .details-popup {
   width: 100%;
   max-width: 550px;
@@ -881,6 +886,76 @@
 
 .close-btn:hover {
   background: #f3f3f3;
+}
+
+.delete-popup {
+  max-width: 390px;
+}
+
+.delete-content {
+  text-align: center;
+}
+
+.delete-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: #fff0f0;
+  color: #d64545;
+  font-size: 20px;
+}
+
+.delete-content p {
+  margin: 0;
+  color: #777;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.delete-content p strong {
+  color: #333;
+}
+
+.delete-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.confirm-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 9px;
+  background: #772149;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.confirm-delete-btn:hover {
+  background: #904568;
+}
+
+.page.dark-mode .delete-popup {
+  background: #211d20;
+}
+
+.page.dark-mode .delete-content p {
+  color: #bbbbbb;
+}
+
+.page.dark-mode .delete-content p strong {
+  color: #eeeeee;
 }
 
 .details-footer .add-task-btn {
