@@ -13,6 +13,12 @@
         LOCK IN
       </span>
 
+      <div class="page-links">
+        <a routerLink="/dashboard">Dashboard</a>
+        <a class="active" routerLink="/tasks">Tasks</a>
+        <a routerLink="/users">Users</a>
+      </div>
+
     </div>
 
     <button class="theme-btn" (click)="toggleTheme()">
@@ -102,11 +108,10 @@
 
       </div>
 
-  <button
-  class="add-task-btn"
-  (click)="openAddTask()">
-  Add Task
-</button>
+      <button type="button" class="add-task-btn" (click)="openAddTask()">
+        <i class="bi bi-plus-lg"></i>
+        <span>Add Task</span>
+      </button>
     </div>
 
   </section>
@@ -310,98 +315,6 @@
     </button>
   </nav>
 
-
-
-  <!-- USERS -->
-
-  <section class="users-section">
-
-    <div class="users-header">
-
-      <div>
-        <h2>Users</h2>
-
-        <span>Manage users and their information</span>
-      </div>
-
-      <button
-        type="button"
-        class="add-user-btn"
-        (click)="openAddUser()">
-        <i class="bi bi-plus-lg"></i>
-        Add User
-      </button>
-
-    </div>
-
-
-    <div class="users-table-wrapper">
-
-      <table class="users-table">
-
-        <thead>
-
-          <tr>
-
-            <th>User</th>
-
-            <th>Email</th>
-
-            <th class="actions-column">
-              Actions
-            </th>
-
-          </tr>
-
-        </thead>
-
-
-        <tbody>
-          <tr *ngFor="let user of users">
-            <td>
-              <div class="user-info">
-                <div class="user-avatar">{{ user.fullName.charAt(0).toUpperCase() }}</div>
-                <span>{{ user.fullName }}</span>
-              </div>
-            </td>
-            <td>{{ user.email }}</td>
-            <td>
-              <div class="user-actions">
-                <button
-                  type="button"
-                  title="View Details"
-                  (click)="viewUser(user)">
-                  <i class="bi bi-eye"></i>
-                </button>
-                <button
-                  type="button"
-                  title="Edit"
-                  (click)="openEditUser(user)">
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button
-                  type="button"
-                  title="Delete"
-                  class="delete-btn"
-                  (click)="requestDeleteUser(user)">
-                  <i class="bi bi-trash3"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr *ngIf="users.length === 0">
-            <td class="empty-table-state" colspan="3">No users found</td>
-          </tr>
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </section>
-
-
-
   <footer class="footer">
 
     <span>
@@ -530,21 +443,20 @@
       </button>
     </div>
 
-    <div class="details-content">
+    <div class="details-content" [formGroup]="taskForm">
 
       <div class="form-group">
         <label>Title</label>
         <input
           type="text"
-          [(ngModel)]="newTask.title"
-          minlength="3"
+          formControlName="title"
           placeholder="Enter task title">
       </div>
 
       <div class="form-group">
         <label>Description</label>
         <textarea
-          [(ngModel)]="newTask.description"
+          formControlName="description"
           placeholder="Enter description">
         </textarea>
       </div>
@@ -553,13 +465,13 @@
         <label>Due Date</label>
         <input
           type="date"
-          [(ngModel)]="newTask.dueDate"
+          formControlName="dueDate"
           required>
       </div>
 
       <div class="form-group">
         <label>Status</label>
-        <select [(ngModel)]="newTask.status">
+        <select formControlName="status">
           <option [ngValue]="0" disabled>Select status</option>
           <option [ngValue]="1">To Do</option>
           <option [ngValue]="2">In Progress</option>
@@ -569,7 +481,7 @@
 
       <div class="form-group">
         <label>Priority</label>
-        <select [(ngModel)]="newTask.priority">
+        <select formControlName="priority">
           <option [ngValue]="0" disabled>Select priority</option>
           <option [ngValue]="1">Low</option>
           <option [ngValue]="2">Medium</option>
@@ -580,7 +492,7 @@
  <div class="form-group">
   <label>Assigned To</label>
 
-  <select [(ngModel)]="newTask.userId">
+  <select formControlName="userId">
     <option [ngValue]="0" disabled>Select user</option>
 
     <option
@@ -625,13 +537,12 @@
       </button>
     </div>
 
-    <div class="details-content">
+    <div class="details-content" [formGroup]="userForm">
       <div class="form-group">
         <label>Full Name</label>
         <input
           type="text"
-          [(ngModel)]="userForm.fullName"
-          required
+          formControlName="fullName"
           placeholder="Enter full name">
       </div>
 
@@ -639,8 +550,7 @@
         <label>Email</label>
         <input
           type="email"
-          [(ngModel)]="userForm.email"
-          required
+          formControlName="email"
           placeholder="Enter email address">
       </div>
     </div>
